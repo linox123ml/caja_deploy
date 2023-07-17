@@ -1,14 +1,15 @@
-import { httpAdmition } from "../utils/https";
+import { server } from "../utils/https";
 
-const searchPostulant = async (document) => {
-  try {
-    let res = await httpAdmition.get(
-      `https://inscripciones.admision.unap.edu.pe/api/get-ingresante/${document}/4`
-    );
-    console.log(res.data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export { searchPostulant };
+export default class PayService {
+  savePay = async (data) => {
+    try {
+      let formData = new FormData();
+      formData.append("person", JSON.stringify(data.person));
+      formData.append("details", JSON.stringify(data.details));
+      let res = await server.post("papeleta/", formData);
+      return res.data;
+    } catch (error) {
+      return res.data;
+    }
+  };
+}
