@@ -1,12 +1,12 @@
 <template>
   <div class="app-wrapper">
     <v-container>
-      <template v-if="postulant">
+      <!-- <template v-if="postulant">
         <FormPay :postulant="postulant" />
-      </template>
-
+      </template> -->
+      <template v-if="!noAuthorize"> no autorizado </template>
       <template v-else>
-        <SearchPostulant @on-success="setPostulant" />
+        <SearchPostulant />
       </template>
     </v-container>
   </div>
@@ -14,13 +14,22 @@
 <script setup>
 import { ref } from "vue";
 import SearchPostulant from "@/components/SearchPostulant.vue";
-import FormPay from "@/components/FormPay.vue";
+import { AuthService } from "./services/index";
 
-const postulant = ref(null);
+const authService = new AuthService();
 
-const setPostulant = (e) => {
-  postulant.value = e;
+const noAuthorize = ref(true);
+
+const mode = import.meta.env.VITE_APP_MODE;
+
+const init = async () => {
+  if (mode === "production") {
+    let res = await authService.validateAuth();
+    noAuthorize.value = res.status;
+  }
 };
+
+init();
 </script>
 
 <style>

@@ -203,9 +203,10 @@ const total = computed(() =>
 const payPrint = ref(null);
 const hasPrint = ref(false);
 
+const urlBase = import.meta.env.VITE_APP_BASE_URL;
+
 const printPDF = () => {
-  let urlPrint =
-    "http://una-caja.test/php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
+  let urlPrint = urlBase + "php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
   window.open(urlPrint, "_blank");
 };
 
@@ -242,10 +243,10 @@ const searchPostulant = async () => {
   if (res.ok) {
     if (res.status) {
       form.value.person = res.data;
-      snakbar.value.show = true;
-      snakbar.value.title = "Datos correctos";
-      snakbar.value.text = "Postulante encontrado";
-      snakbar.value.type = "green";
+      // snakbar.value.show = true;
+      // snakbar.value.title = "Datos correctos";
+      // snakbar.value.text = "Postulante encontrado";
+      // snakbar.value.type = "green";
       //   emit("onSuccess", res.data);
     } else {
       snakbar.value.show = true;
