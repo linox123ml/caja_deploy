@@ -1,8 +1,14 @@
 <?php
-	$cn = new mysqli('localhost', 'root', '', 'netcaja');
-	// $cn = new mysqli('64.20.56.124', 'lino', 'caja2023lnx', 'netcaja');
-	// $cn = new mysqli('localhost', 'root', 'Universidades', 'netcaja');
-	// $cn = new mysqli('137.184.129.66', 'elvis', 'TiYsLawxrF', 'caja');
-	if ($cn->connect_errno) {
-	    echo "Fallo al conectar a MySQL: (" . $cn->connect_errno . ") " . $cn->connect_error;
-	}
+
+$config = include '../env.php';
+
+$HOST =  $config['DB_HOST'];
+$NAME =  $config['DB_NAME'];
+$USER =  $config['DB_USER'];
+$PASSWORD =  $config['DB_PASSWORD'];
+
+$cn = new mysqli($HOST, $USER, $PASSWORD, $NAME);
+
+if ($cn->connect_errno) {
+	echo "Fallo al conectar a MySQL: (" . $cn->connect_errno . ") " . $cn->connect_error;
+}
