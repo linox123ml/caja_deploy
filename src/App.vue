@@ -25,7 +25,7 @@ const mode = import.meta.env.VITE_APP_MODE;
 const init = async () => {
   if (mode === "production") {
     let res = await authService.validateAuth();
-    noAuthorize.value = res.status;
+    noAuthorize.value = res.success;
   }
 };
 
