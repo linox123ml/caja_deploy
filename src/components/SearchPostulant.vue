@@ -168,7 +168,7 @@ import { computed, ref, watch, watchEffect } from "vue";
 import { AdmitionService, PayService } from "../services/";
 import { useMagicKeys } from "@vueuse/core";
 
-const { escape, space, p, i, enter } = useMagicKeys();
+const { escape, space, p, i } = useMagicKeys();
 
 const admitionService = new AdmitionService();
 const payService = new PayService();
@@ -278,9 +278,6 @@ watchEffect(async () => {
     printPDF();
   }
 
-  if (enter.value && !form.value.person && !hasPrint.value) {
-    searchPostulant();
-  }
 });
 
 const restForm = () => {
