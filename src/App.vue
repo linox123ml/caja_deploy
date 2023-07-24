@@ -5,10 +5,12 @@
         <img src="@/assets/logo.png" width="50" alt="" />
       </div>
       <v-toolbar-title>CAJA - UNA-PUNO</v-toolbar-title>
-      <v-toolbar-subtitle>Examen General</v-toolbar-subtitle>
+      <v-toolbar-subtitle>
+        <v-chip label> Examen General 2023</v-chip></v-toolbar-subtitle
+      >
       <v-spacer></v-spacer>
       <v-btn>
-        Salir
+        <a href="/" target="blank" class="text-white"> Ir a caja </a>
       </v-btn>
     </v-app-bar>
 
@@ -17,7 +19,24 @@
         <!-- <template v-if="postulant">
         <FormPay :postulant="postulant" />
       </template> -->
-        <template v-if="!isLogged"> no autorizado </template>
+        <template v-if="!isLogged">
+          <v-row>
+            <v-col cols="12" class="text-center">
+              <span class="text-sm"> No autorizado </span>
+            </v-col>
+            <v-col cols="12" class="text-center">
+              <span class="text-h4"> Iniciar sesion </span>
+            </v-col>
+            <v-col cols="12" class="text-center">
+              <a href="/" target="blank"> - IR AL LOGIN - </a>
+            </v-col>
+
+            <v-col cols="12" class="text-center">
+              Ya inicié sesion:
+              <v-btn variant="tonal" @click="init">Actualizar</v-btn>
+            </v-col>
+          </v-row>
+        </template>
         <template v-else>
           <SearchPostulant />
         </template>

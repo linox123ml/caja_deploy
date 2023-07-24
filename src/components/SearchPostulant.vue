@@ -312,7 +312,7 @@ const searchPostulant = async () => {
   const { valid } = await formSearch.value.validate();
   if (!valid) return;
   let res = await admitionService.searchPostulant(search.value);
-  console.log(res);
+
   if (res.ok) {
     if (res.status) {
       form.value.person = null;
