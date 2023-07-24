@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto mb-5" style="width: 500px">
+  <v-card :loading="postulantLoading" class="mx-auto mb-5" style="width: 500px">
     <v-container>
       <v-form ref="formSearch" @submit.prevent="searchPostulant">
         <div class="text-subtitle-1 mb-1">Buscar / Ingese el DNI</div>
@@ -11,17 +11,33 @@
           variant="outlined"
           :rules="rules"
           counter
+          maxlength="8"
+          ref="inputSearch"
         />
 
-        <v-btn
-          class="mt-1"
-          color="blue"
-          block
-          type="submit"
-          :loading="postulantLoading"
-        >
-          Buscar postulante
-        </v-btn>
+        <template v-if="form.person">
+          <v-btn
+            class="mt-1"
+            color="red"
+            block
+            type="submit"
+            :loading="postulantLoading"
+          >
+            CANCELAR <small class="ms-2">[ESC]</small>
+          </v-btn>
+        </template>
+
+        <template v-else>
+          <v-btn
+            class="mt-1"
+            color="blue"
+            block
+            type="submit"
+            :loading="postulantLoading"
+          >
+            Buscar postulante <small class="ms-2">[ENTER]</small>
+          </v-btn>
+        </template>
       </v-form>
     </v-container>
   </v-card>
@@ -38,6 +54,18 @@
           :key="index"
           :title="item.title"
         >
+          <v-switch
+            v-if="item.options"
+            v-for="option in item.options"
+            :value="option.price"
+            density="compact"
+            color="black"
+            hide-details
+            class="px-7 text-black font-weight-bold"
+            v-model="item.price"
+            :label="option.title"
+            :readonly="item.price === option.price"
+          ></v-switch>
           <template v-slot:append>
             <v-switch
               :value="item"
@@ -52,23 +80,23 @@
     </v-col>
     <v-col cols="12" md="6">
       <v-card>
-        <v-card-title>
-          {{
-            `${form.person.nro_doc} | ${form.person.nombres}  ${form.person.primer_apellido}  ${form.person.segundo_apellido}`
-          }}
+        <v-card-title class="font-weight-bold">
+          <small>
+            {{
+              `${form.person.nro_doc} | ${form.person.nombres}  ${form.person.primer_apellido}  ${form.person.segundo_apellido}`
+            }}
+          </small>
         </v-card-title>
         <v-divider></v-divider>
+
         <v-card-item>
           <v-list-item v-for="(item, index) in form.details" :key="index">
-            <v-list-item-subtitle>
+            <v-list-item-title>
               {{ item.title }}
-            </v-list-item-subtitle>
-
-            <v-list-item-title> </v-list-item-title>
+            </v-list-item-title>
             <v-list-item-subtitle>
               {{ "S/. " + item.price }}
             </v-list-item-subtitle>
-
             <template v-slot:append>
               <v-chip class="ma-2" size="x-large" label>
                 <strong> {{ "S/. " + item.price }}</strong>
@@ -95,14 +123,12 @@
         <v-card-actions class="">
           <template v-if="hasPrint">
             <v-btn block variant="flat" color="orange" @click="printPDF">
-              imprimir {{ payPrint.idpadre }}
+              imprimir <small class="ms-3">[ ESPACIO + I]</small>
             </v-btn>
           </template>
           <template v-else>
-            <v-btn variant="flat" color="red"> Cancelar </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn variant="flat" color="success" @click="savePay">
-              Pagar
+            <v-btn block variant="flat" color="success" @click="savePay">
+              Pagar <small class="ms-3">[ ESPACIO + P ]</small>
             </v-btn>
           </template>
         </v-card-actions>
@@ -123,8 +149,11 @@
   </v-snackbar>
 </template>
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import { AdmitionService, PayService } from "../services/";
+import { useMagicKeys } from "@vueuse/core";
+
+const { escape, space, p, i } = useMagicKeys();
 
 const admitionService = new AdmitionService();
 const payService = new PayService();
@@ -132,7 +161,9 @@ const payService = new PayService();
 const emit = defineEmits(["onSuccess"]);
 
 const formSearch = ref(null);
-const search = ref("71576906");
+const inputSearch = ref(null);
+
+const search = ref("73618179");
 
 const rules = ref([
   (value) => {
@@ -151,47 +182,65 @@ const snakbar = ref({
 const postulant = ref(null);
 const postulantLoading = ref(false);
 
-const conceptItems = [
+const conceptItems = ref([
   {
     value: "0075",
+    codeBN: 26,
     title: "Derecho de Admisión",
-    price: 20.0,
+    price: 200.0,
+    options: [
+      {
+        title: "Colegio Estatal",
+        price: 200.0,
+      },
+      {
+        title: "Colegio Particular",
+        price: 350.0,
+      },
+      {
+        title: "Colegio Extranjero",
+        price: 450.0,
+      },
+    ],
   },
-
   {
     value: "0219",
+    codeBN: 39,
     title: "Servicio Medico",
     price: 30.0,
   },
-  {
-    value: "0075",
-    title: "Derecho de Admisión - REZAGADOS",
-    price: 80.0,
-  },
+
   {
     value: "0269",
+    codeBN: 25,
     title: "Duplicado de constancia de inscripcion modificada",
-    price: 80.0,
+    price: 30.0,
   },
 
-  {
-    value: "0269",
-    title: "Rezagados (para el cambio de postulacion de programa de estudio.)",
-    price: 100.0,
-  },
+  // {
+  //   value: "0075",
+  //   title: "Derecho de Admisión - REZAGADOS",
+  //   price: 80.0,
+  // },
 
-  {
-    value: "0269",
-    title:
-      "Rezagados (al control de identificacion personal y recepcion de documentos, solo para postulantes aptos.)",
-    price: 100.0,
-  },
-];
+  // {
+  //   value: "0269",
+  //   title: "Rezagados (para el cambio de postulacion de programa de estudio.)",
+  //   price: 100.0,
+  // },
+
+  // {
+  //   value: "0269",
+  //   title:
+  //     "Rezagados (al control de identificacion personal y recepcion de documentos, solo para postulantes aptos.)",
+  //   price: 100.0,
+  // },
+]);
 
 const form = ref({
-  code: "", //back dni
+  code: "",
   person: postulant.value,
-  details: [{ ...conceptItems[0] }],
+  details: [],
 });
 
 const total = computed(() =>
@@ -199,6 +248,32 @@ const total = computed(() =>
     return total + item.price;
   }, 0)
 );
+
+watch(escape, (val) => {
+  if (val) {
+    restForm();
+  }
+});
+
+watchEffect(async () => {
+  if (space.value && p.value && form.value.person) {
+    await savePay();
+  }
+
+  if (space.value && i.value && hasPrint.value) {
+    printPDF();
+  }
+});
+
+const restForm = () => {
+  form.value.code = null;
+  form.value.person = null;
+  form.value.details = [];
+  payPrint.value = null;
+  hasPrint.value = false;
+  search.value = null;
+  inputSearch.value.focus();
+};
 
 const payPrint = ref(null);
 const hasPrint = ref(false);
@@ -213,8 +288,6 @@ const printPDF = () => {
 const savePay = async () => {
   payPrint.value = null;
   let res = await payService.savePay(form.value);
-
-  console.log(res);
 
   if (res.success) {
     // form.value.person = res.data;
@@ -242,18 +315,23 @@ const searchPostulant = async () => {
   console.log(res);
   if (res.ok) {
     if (res.status) {
+      form.value.person = null;
+      form.value.details = [];
       form.value.person = res.data;
-      // snakbar.value.show = true;
-      // snakbar.value.title = "Datos correctos";
-      // snakbar.value.text = "Postulante encontrado";
-      // snakbar.value.type = "green";
-      //   emit("onSuccess", res.data);
+
+      res.data.pagos.forEach((item) => {
+        let pago = conceptItems.value.find(
+          (element) => item.cod === element.codeBN
+        );
+        if (pago) {
+          form.value.details.push(pago);
+        }
+      });
     } else {
       snakbar.value.show = true;
       snakbar.value.title = "Datos incorrectos";
       snakbar.value.text = "Postulante no encontrado";
       snakbar.value.type = "red";
-      //show error:
     }
   } else {
     snakbar.value.show = true;
