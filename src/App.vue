@@ -10,7 +10,7 @@
       >
       <v-spacer></v-spacer>
       <v-btn>
-        <a href="/" target="blank" class="text-white"> Ir a caja </a>
+        <a :href="baseUrl" target="blank" class="text-white"> Ir a caja </a>
       </v-btn>
     </v-app-bar>
 
@@ -28,7 +28,7 @@
               <span class="text-h4"> Iniciar sesion </span>
             </v-col>
             <v-col cols="12" class="text-center">
-              <a href="/" target="blank"> - IR AL LOGIN - </a>
+              <a :href="baseUrl" target="blank"> - IR AL LOGIN - </a>
             </v-col>
 
             <v-col cols="12" class="text-center">
@@ -48,6 +48,8 @@
 import { ref } from "vue";
 import SearchPostulant from "@/components/SearchPostulant.vue";
 import { AuthService } from "./services/index";
+
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 const authService = new AuthService();
 const isLogged = ref(true);

@@ -8,11 +8,19 @@
  * 			/?w=<DNI CONSULTADO>, el parametro de consulta es w
  * 			se valida el DNI a 6 como posible Código de Matricula  
  */
-define('SERVER_DB', '127.0.0.1');
+
+ $config = include '../env.php';
+
+$HOST =  $config['DB_HOST'];
+$NAME =  $config['DB_NAME'];
+$USER =  $config['DB_USER'];
+$PASSWORD =  $config['DB_PASSWORD'];
+
+define('SERVER_DB', $HOST);
 define('PORT_DB', 3306);
-define('DATABASE_NAME', 'netcaja');
-define('USER_DB', 'root');
-define('PASSWORD_DB', '');
+define('DATABASE_NAME', $NAME);
+define('USER_DB', $USER);
+define('PASSWORD_DB', $PASSWORD );
 define('DSN_DB', 'mysql:host=' . SERVER_DB . ':' . @strval(PORT_DB) . ';dbname=' . DATABASE_NAME . ';charset=utf8');
 
 # Recuperar la llamada del REQUEST
@@ -91,5 +99,3 @@ switch ( $solicitud )
 	}
 	*/
 }
-
-?>
