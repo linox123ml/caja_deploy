@@ -1,5 +1,9 @@
 <template>
-  <v-card :loading="postulantLoading" class="mx-auto mb-5" style="width: 500px">
+  <v-card
+    :loading="postulantLoading"
+    class="mx-auto mb-5 border"
+    style="width: 500px"
+  >
     <v-container>
       <v-form ref="formSearch" @submit.prevent="searchPostulant">
         <div class="text-subtitle-1 mb-1">Buscar / Ingese el DNI</div>
@@ -44,7 +48,7 @@
 
   <v-row v-if="form.person">
     <v-col cols="12" md="6">
-      <v-card>
+      <v-card class="border">
         <v-card-title>Conceptos de pago </v-card-title>
         <v-divider></v-divider>
 
@@ -71,6 +75,7 @@
               :value="item"
               v-model="form.details"
               inset
+              @update:modelValue="validateDetails()"
               hide-details
               color="blue"
             ></v-switch>
@@ -79,7 +84,7 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="6">
-      <v-card>
+      <v-card class="border">
         <v-card-title class="font-weight-bold">
           <small>
             {{
@@ -110,11 +115,20 @@
               <strong>Total a pagar</strong>
             </v-list-item-subtitle>
 
-            <v-list-item-title> </v-list-item-title>
+            <v-list-item-title class="text-end me-4 text-red">
+              <strong>{{ detalleError }}</strong>
+            </v-list-item-title>
 
             <template v-slot:append>
-              <v-chip class="ma-2" size="x-large" label>
-                <strong> {{ "S/. " + total }}</strong>
+              <v-chip
+                class="ma-2"
+                size="x-large"
+                label
+                :class="detalleError !== null ? 'text-red' : ''"
+              >
+                <strong :class="detalleError !== null ? 'text-red' : ''">
+                  {{ "S/. " + total }}</strong
+                >
               </v-chip>
             </template>
           </v-list-item>
@@ -285,8 +299,31 @@ const printPDF = () => {
   window.open(urlPrint, "_blank");
 };
 
+const detalleError = ref(null);
+
+const validateDetails = async () => {
+  console.log("validate");
+  if (form.value.details.length < 1) {
+    detalleError.value = "Seleccion al menos un concepto.";
+    return false;
+  } else {
+    detalleError.value = null;
+    return true;
+  }
+};
+
 const savePay = async () => {
   payPrint.value = null;
+
+  let validDetails = await validateDetails();
+  if (!validDetails) {
+    snakbar.value.show = true;
+    snakbar.value.title = "Error";
+    snakbar.value.text = "Seleccion al menos un concepto de pago";
+    snakbar.value.type = "red";
+    return;
+  }
+
   let res = await payService.savePay(form.value);
 
   if (res.success) {
