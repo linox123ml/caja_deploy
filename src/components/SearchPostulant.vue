@@ -24,9 +24,11 @@
             class="mt-1"
             color="red"
             block
-            type="submit"
+            type="button"
             :loading="postulantLoading"
+            @click="restForm()"
           >
+
             CANCELAR <small class="ms-2">[ESC]</small>
           </v-btn>
         </template>
