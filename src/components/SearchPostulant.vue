@@ -346,8 +346,17 @@ const savePay = async () => {
 
 const searchPostulant = async () => {
   postulantLoading.value = true;
+
   const { valid } = await formSearch.value.validate();
-  if (!valid) return;
+  if (!valid) {
+    snakbar.value.show = true;
+    snakbar.value.title = "Error";
+    snakbar.value.text = "Ingrese un DNI valido (8 digitos )";
+    snakbar.value.type = "red";
+
+    postulantLoading.value = false;
+    return;
+  }
   let res = await admitionService.searchPostulant(search.value);
 
   if (res.ok) {
