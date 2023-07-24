@@ -50,11 +50,8 @@ import SearchPostulant from "@/components/SearchPostulant.vue";
 import { AuthService } from "./services/index";
 
 const authService = new AuthService();
-
 const isLogged = ref(true);
-
 const mode = import.meta.env.VITE_APP_MODE;
-
 const init = async () => {
   if (mode === "production") {
     let res = await authService.validateAuth();
