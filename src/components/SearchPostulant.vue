@@ -28,7 +28,6 @@
             :loading="postulantLoading"
             @click="restForm()"
           >
-
             CANCELAR <small class="ms-2">[ESC]</small>
           </v-btn>
         </template>
@@ -169,7 +168,7 @@ import { computed, ref, watch, watchEffect } from "vue";
 import { AdmitionService, PayService } from "../services/";
 import { useMagicKeys } from "@vueuse/core";
 
-const { escape, space, p, i } = useMagicKeys();
+const { escape, space, p, i, enter } = useMagicKeys();
 
 const admitionService = new AdmitionService();
 const payService = new PayService();
@@ -225,7 +224,6 @@ const conceptItems = ref([
     title: "Servicio Medico",
     price: 30.0,
   },
-
   {
     value: "0269",
     codeBN: 25,
@@ -279,6 +277,10 @@ watchEffect(async () => {
   if (space.value && i.value && hasPrint.value) {
     printPDF();
   }
+
+  if (enter.value && !form.value.person && !hasPrint.value) {
+    searchPostulant();
+  }
 });
 
 const restForm = () => {
@@ -304,7 +306,7 @@ const printPDF = () => {
 const detalleError = ref(null);
 
 const validateDetails = async () => {
-  console.log("validate");
+
   if (form.value.details.length < 1) {
     detalleError.value = "Seleccion al menos un concepto.";
     return false;
