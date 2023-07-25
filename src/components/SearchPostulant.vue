@@ -178,7 +178,7 @@ const emit = defineEmits(["onSuccess"]);
 const formSearch = ref(null);
 const inputSearch = ref(null);
 
-const search = ref("73618179");
+const search = ref(null);
 
 const rules = ref([
   (value) => {
@@ -314,36 +314,35 @@ const validateDetails = async () => {
   }
 };
 
-const fakePerson = {
-  nro_doc: "73618178",
-  primer_apellido: "Peres2",
-  segundo_apellido: "Peres",
-  nombres: "Juan",
-  id_gestion: 1,
-  pagos: [
-    {
-      cod: 26,
-      monto: 200,
-    },
-  ],
-};
+// const fakePerson = {
+//   nro_doc: "73618178",
+//   primer_apellido: "Peres2",
+//   segundo_apellido: "Peres",
+//   nombres: "Juan",
+//   id_gestion: 1,
+//   pagos: [
+//     {
+//       cod: 26,
+//       monto: 200,
+//     },
+//   ],
+// };
+
+//*fekeSearchPostulant
+// form.value.person = null;
+//   form.value.details = [];
+//   form.value.person = fakePerson;
+
+//   fakePerson.pagos.forEach((item) => {
+//     let pago = conceptItems.value.find(
+//       (element) => item.cod === element.codeBN
+//     );
+//     if (pago) {
+//       form.value.details.push(pago);
+//     }
+//   });
 
 const searchPostulant = async () => {
-  form.value.person = null;
-  form.value.details = [];
-  form.value.person = fakePerson;
-
-  fakePerson.pagos.forEach((item) => {
-    let pago = conceptItems.value.find(
-      (element) => item.cod === element.codeBN
-    );
-    if (pago) {
-      form.value.details.push(pago);
-    }
-  });
-
-  return;
-
   postulantLoading.value = true;
 
   const { valid } = await formSearch.value.validate();
@@ -406,9 +405,7 @@ const savePay = async () => {
     snakbar.value.title = "Exito.";
     snakbar.value.text = res.message;
     snakbar.value.type = "green";
-
     payPrint.value = res.data;
-
     hasPrint.value = true;
   } else {
     snakbar.value.show = true;
