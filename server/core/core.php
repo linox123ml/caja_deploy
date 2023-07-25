@@ -4,14 +4,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class CORE
 {
     protected $response;
-
+    protected $mode;
 
     public function __construct()
     {
+        $config = include '../env.php';
+
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: GET,POST");
         header("Access-Control-Allow-Headers: Content-Type");
-
+        $this->mode =  $config['MODE'];
         $this->response = [];
     }
 
@@ -62,13 +64,16 @@ class CORE
 
     public function savePago($person, $details)
     {
-        // if (!isset($_SESSION['idusuario'])) {
-        //     $this->response['success'] = false;
-        //     $this->response['message'] = 'No autorizad(a)';
-        //     $this->response['data'] = null;
-        //     echo json_encode($this->response);
-        //     exit;
-        // }
+        if ($this->mode === 'production') {
+            if (!isset($_SESSION['idusuario'])) {
+                $this->response['success'] = false;
+                $this->response['message'] = 'No autorizad(a)';
+                $this->response['data'] = null;
+                echo json_encode($this->response);
+                exit;
+            }
+        }
+
         include 'cn.php';
 
         $cn->begin_transaction();
@@ -101,13 +106,20 @@ class CORE
     public function savePapeletaPago($person, $cn)
     {
 
-        $var_anio =  '2023'; //$_SESSION['anio']; //*default: 2023
-        $idusuario =  '0028'; //$_SESSION['idusuario']; //*default: root
+        if ($this->mode === 'production') {
+            $_SESSION['anio'];
+            $_SESSION['idusuario'];
+        } else {
+            $var_anio =  '2023';
+            $idusuario =  '0028';
+        }
 
         $fecha     = date('Y-m-d');
 
-        $idtipo    = 4; //*default: otro persona 
-        $idcodigo = $person->nro_doc;
+        $newPerson =  $this->saveOtraPersona($person);
+
+        $idtipo    = 4; //*default: otra persona 
+        $idcodigo = $newPerson['idotro'];
         $codigo    = $person->nro_doc;
         $nombre    = $person->nombres . ' ' . $person->primer_apellido  . ' ' .  $person->segundo_apellido;
         $clave = $this->generar_clave();
@@ -142,13 +154,12 @@ class CORE
             'serie' => $serie,
             'numero' => $numero,
             'clave' => $clave,
-            'error' => $cn->error
+            'error' => $cn->error,
+            'newPerson' => $newPerson['idotro'],
         ];
-
-        // $this->saveOtraPersona($person);
+        
         return $datos;
     }
-
 
     public function saveDetaPapeletaPago($papeleta, $detail, $cn)
     {
@@ -177,29 +188,39 @@ class CORE
 
     public function saveOtraPersona($person)
     {
-
         include 'cn.php';
 
-        $sql = "select  from teso_otrapersona where idpapeleta='$idpadre'";
-        $result = $cn->query($sql);
+        $newPerson = null;
+
+        $sqlSelect = "select idotro, codigo from teso_otrapersona ";
+        $sqlSelect .= "where codigo = '$person->nro_doc';";
+        $result = $cn->query($sqlSelect);
         $row = $result->fetch_array();
-        $importe = $row['total'];
 
-        $postdata = json_decode(file_get_contents("php://input"));
+        if ($row === null) {
+            $codigo = $person->nro_doc;
+            $nombre =  strtoupper($person->nombres . ' ' . $person->primer_apellido  . ' ' .  $person->segundo_apellido);
+            $direccion  = null;
+            $email  = null;
+            $telefono   = null;
 
-        $codigo        = $postdata->codigo;
-        $nombre        = $postdata->nombre;
-        $direccion    = $postdata->direccion;
-        $email        = $postdata->email;
-        $telefono    = $postdata->telefono;
+            $sql = "insert into teso_otrapersona (codigo,nombre,direccion,email,telefono) ";
+            $sql .= "values ('$codigo','$nombre','$direccion','$email','$telefono') ";
+            $cn->query($sql);
 
-        # Generamos la nueva llave primaria
-        $sql = "insert into teso_otrapersona (codigo,nombre,direccion,email,telefono) ";
-        $sql .= "values ('$codigo','$nombre','$direccion','$email','$telefono') ";
-        $cn->query($sql);
+            $sqlSelect = "select idotro, codigo from teso_otrapersona ";
+            $sqlSelect .= "where codigo = '$person->nro_doc';";
+            $result = $cn->query($sqlSelect);
+            $row = $result->fetch_array();
+
+            $newPerson = $row;
+        } else {
+
+            $newPerson = $row;
+        }
+
+        return $newPerson;
     }
-
-
 
     protected function generar_clave()
     {

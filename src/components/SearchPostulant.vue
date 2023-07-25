@@ -277,7 +277,6 @@ watchEffect(async () => {
   if (space.value && i.value && hasPrint.value) {
     printPDF();
   }
-
 });
 
 const restForm = () => {
@@ -294,16 +293,18 @@ const payPrint = ref(null);
 const hasPrint = ref(false);
 
 const urlBase = import.meta.env.VITE_APP_BASE_URL;
+const urlPrint = ref(null);
 
 const printPDF = () => {
-  let urlPrint = urlBase + "php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
-  window.open(urlPrint, "_blank");
+  urlPrint.value =
+    urlBase + "php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
+
+  window.open(urlPrint.value);
 };
 
 const detalleError = ref(null);
 
 const validateDetails = async () => {
-
   if (form.value.details.length < 1) {
     detalleError.value = "Seleccion al menos un concepto.";
     return false;
@@ -313,39 +314,36 @@ const validateDetails = async () => {
   }
 };
 
-const savePay = async () => {
-  payPrint.value = null;
-
-  let validDetails = await validateDetails();
-  if (!validDetails) {
-    snakbar.value.show = true;
-    snakbar.value.title = "Error";
-    snakbar.value.text = "Seleccion al menos un concepto de pago";
-    snakbar.value.type = "red";
-    return;
-  }
-
-  let res = await payService.savePay(form.value);
-
-  if (res.success) {
-    // form.value.person = res.data;
-    snakbar.value.show = true;
-    snakbar.value.title = "Exito.";
-    snakbar.value.text = res.message;
-    snakbar.value.type = "green";
-
-    payPrint.value = res.data;
-
-    hasPrint.value = true;
-  } else {
-    snakbar.value.show = true;
-    snakbar.value.title = "Ocurrion un error";
-    snakbar.value.text = res.message;
-    snakbar.value.type = "red";
-  }
+const fakePerson = {
+  nro_doc: "73618178",
+  primer_apellido: "Peres2",
+  segundo_apellido: "Peres",
+  nombres: "Juan",
+  id_gestion: 1,
+  pagos: [
+    {
+      cod: 26,
+      monto: 200,
+    },
+  ],
 };
 
 const searchPostulant = async () => {
+  form.value.person = null;
+  form.value.details = [];
+  form.value.person = fakePerson;
+
+  fakePerson.pagos.forEach((item) => {
+    let pago = conceptItems.value.find(
+      (element) => item.cod === element.codeBN
+    );
+    if (pago) {
+      form.value.details.push(pago);
+    }
+  });
+
+  return;
+
   postulantLoading.value = true;
 
   const { valid } = await formSearch.value.validate();
@@ -354,7 +352,6 @@ const searchPostulant = async () => {
     snakbar.value.title = "Error";
     snakbar.value.text = "Ingrese un DNI valido (8 digitos )";
     snakbar.value.type = "red";
-
     postulantLoading.value = false;
     return;
   }
@@ -387,5 +384,37 @@ const searchPostulant = async () => {
     snakbar.value.type = "red";
   }
   postulantLoading.value = false;
+};
+
+const savePay = async () => {
+  payPrint.value = null;
+
+  let validDetails = await validateDetails();
+  if (!validDetails) {
+    snakbar.value.show = true;
+    snakbar.value.title = "Error";
+    snakbar.value.text = "Seleccion al menos un concepto de pago";
+    snakbar.value.type = "red";
+    return;
+  }
+
+  let res = await payService.savePay(form.value);
+
+  if (res.success) {
+    // form.value.person = res.data;
+    snakbar.value.show = true;
+    snakbar.value.title = "Exito.";
+    snakbar.value.text = res.message;
+    snakbar.value.type = "green";
+
+    payPrint.value = res.data;
+
+    hasPrint.value = true;
+  } else {
+    snakbar.value.show = true;
+    snakbar.value.title = "Ocurrion un error";
+    snakbar.value.text = res.message;
+    snakbar.value.type = "red";
+  }
 };
 </script>
