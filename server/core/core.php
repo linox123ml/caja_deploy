@@ -65,6 +65,7 @@ class CORE
     public function savePago($person, $details)
     {
         if ($this->mode === 'production') {
+            session_start();
             if (!isset($_SESSION['idusuario'])) {
                 $this->response['success'] = false;
                 $this->response['message'] = 'No autorizad(a)';
