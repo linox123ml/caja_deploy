@@ -314,35 +314,38 @@ const validateDetails = async () => {
   }
 };
 
-// const fakePerson = {
-//   nro_doc: "73618178",
-//   primer_apellido: "Peres2",
-//   segundo_apellido: "Peres",
-//   nombres: "Juan",
-//   id_gestion: 1,
-//   pagos: [
-//     {
-//       cod: 26,
-//       monto: 200,
-//     },
-//   ],
-// };
+const fakePerson = {
+  nro_doc: "73618178",
+  primer_apellido: "Peres2",
+  segundo_apellido: "Peres",
+  nombres: "Juan",
+  id_gestion: 1,
+  pagos: [
+    {
+      cod: 26,
+      monto: 200,
+    },
+  ],
+};
 
 //*fekeSearchPostulant
-// form.value.person = null;
-//   form.value.details = [];
-//   form.value.person = fakePerson;
-
-//   fakePerson.pagos.forEach((item) => {
-//     let pago = conceptItems.value.find(
-//       (element) => item.cod === element.codeBN
-//     );
-//     if (pago) {
-//       form.value.details.push(pago);
-//     }
-//   });
 
 const searchPostulant = async () => {
+  form.value.person = null;
+  form.value.details = [];
+  form.value.person = fakePerson;
+
+  fakePerson.pagos.forEach((item) => {
+    let pago = conceptItems.value.find(
+      (element) => item.cod === element.codeBN
+    );
+    if (pago) {
+      form.value.details.push(pago);
+    }
+  });
+
+  return;
+
   postulantLoading.value = true;
 
   const { valid } = await formSearch.value.validate();
