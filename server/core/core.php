@@ -109,8 +109,8 @@ class CORE
 
         if ($this->mode === 'production') {
             session_start();
-            $_SESSION['anio'];
-            $_SESSION['idusuario'];
+            $var_anio = $_SESSION['anio'];
+            $idusuario = $_SESSION['idusuario'];
         } else {
             $var_anio =  '2023';
             $idusuario =  '0028';
@@ -159,7 +159,7 @@ class CORE
             'error' => $cn->error,
             'newPerson' => $newPerson['idotro'],
         ];
-        
+
         return $datos;
     }
 
