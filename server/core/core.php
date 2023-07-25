@@ -108,6 +108,7 @@ class CORE
     {
 
         if ($this->mode === 'production') {
+            session_start();
             $_SESSION['anio'];
             $_SESSION['idusuario'];
         } else {
