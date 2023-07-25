@@ -5,8 +5,8 @@
         <img src="@/assets/logo.png" width="50" alt="" />
       </div>
       <v-toolbar-title>CAJA - UNA-PUNO</v-toolbar-title>
-    
-        <v-chip label> Examen General 2023</v-chip>
+
+      <v-chip label> Examen General 2023</v-chip>
       <v-spacer></v-spacer>
       <v-btn>
         <a :href="baseUrl" target="blank" class="text-white"> Ir a caja </a>
