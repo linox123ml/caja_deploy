@@ -13,42 +13,55 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main>
-      <v-container>
-        <!-- <template v-if="postulant">
-        <FormPay :postulant="postulant" />
-      </template> -->
-        <template v-if="!isLogged">
-          <v-row>
-            <v-col cols="12" class="text-center">
-              <span class="text-sm"> No autorizado </span>
-            </v-col>
-            <v-col cols="12" class="text-center">
-              <span class="text-h4"> Iniciar sesion </span>
-            </v-col>
-            <v-col cols="12" class="text-center">
-              <a :href="baseUrl" target="blank"> - IR AL LOGIN - </a>
-            </v-col>
+    <template v-if="!isLogged">
+      <v-row>
+        <v-col cols="12" class="text-center">
+          <span class="text-sm"> No autorizado </span>
+        </v-col>
+        <v-col cols="12" class="text-center">
+          <span class="text-h4"> Iniciar sesion </span>
+        </v-col>
+        <v-col cols="12" class="text-center">
+          <a :href="baseUrl" target="blank"> - IR AL LOGIN - </a>
+        </v-col>
 
-            <v-col cols="12" class="text-center">
-              Ya inicié sesion:
-              <v-btn variant="tonal" @click="init">Actualizar</v-btn>
-            </v-col>
-          </v-row>
-        </template>
-        <template v-else>
-          <SearchPostulant />
-        </template>
-      </v-container>
-    </v-main>
+        <v-col cols="12" class="text-center">
+          Ya inicié sesion:
+          <v-btn variant="tonal" @click="init">Actualizar</v-btn>
+        </v-col>
+      </v-row>
+    </template>
+    <template v-else>
+      <v-main>
+        <v-toolbar>
+          <v-tabs v-model="tab">
+            <v-tab value="ins"> Inscripciones </v-tab>
+            <v-tab value="mat"> Matriculas </v-tab>
+          </v-tabs>
+        </v-toolbar>
+        <v-container>
+          <v-window v-model="tab">
+            <v-window-item value="ins">
+              <SearchPostulant />
+            </v-window-item>
+            <v-window-item value="mat">
+              <FormMatricula />
+            </v-window-item>
+          </v-window>
+        </v-container>
+      </v-main>
+    </template>
   </v-app>
 </template>
 <script setup>
 import { ref } from "vue";
 import SearchPostulant from "@/components/SearchPostulant.vue";
+import FormMatricula from "@/components/FormMatricula.vue";
 import { AuthService } from "./services/index";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
+const tab = ref("ins");
 
 const authService = new AuthService();
 const isLogged = ref(true);
