@@ -322,7 +322,7 @@ class CORE
             'numero' => $numero,
             'clave' => $clave,
             'error' => $cn->error,
-            'newPerson' => $newPerson,
+            // 'newPerson' => $newPerson,
         ];
 
         return $datos;
