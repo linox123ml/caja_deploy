@@ -217,28 +217,6 @@ class CORE
             }
         }
 
-        try {
-            
-            $newPerson =  $this->saveEstudiante($person);
-            var_dump($newPerson);
-
-            $this->response['message'] = 'Pago regitrado con exito';
-            $this->response['data'] = $newPerson;
-            echo json_encode($this->response);
-            //code...
-        } catch (\Throwable $th) {
-            //throw $th;
-
-            var_dump($newPerson);
-
-            $this->response['message'] = $th;
-            $this->response['data'] = $newPerson;
-            echo json_encode($this->response);
-        }
-
-
-        return;
-
         include 'cn.php';
 
         $cn->begin_transaction();
@@ -322,7 +300,7 @@ class CORE
             'numero' => $numero,
             'clave' => $clave,
             'error' => $cn->error,
-            // 'newPerson' => $newPerson,
+            'newPerson' => $newPerson,
         ];
 
         return $datos;
@@ -374,10 +352,7 @@ class CORE
             
             $sql = "insert into estudiante (num_mat,paterno,materno,nombres) ";
             $sql .= "values ('$codigo','$paterno','$materno','$nombres') ";
-            $res = $unap->query($sql);
-
-            var_dump($sql);
-            var_dump($res);
+            $unap->query($sql);
 
             $sqlSelect = "select num_mat from estudiante ";
             $sqlSelect .= "where num_mat = '$person->codigo_ingreso';";
@@ -389,8 +364,6 @@ class CORE
 
             $newPerson = $row;
         }
-
-
         $unap->close();
         return $newPerson;
     }
