@@ -15,6 +15,7 @@
           variant="outlined"
           :rules="rules"
           counter
+          :disabled="form.person ? true: false"
           maxlength="8"
           ref="inputSearch"
         />
@@ -28,7 +29,7 @@
             :loading="postulantLoading"
             @click="restForm()"
           >
-            CANCELAR <small class="ms-2">[ESC]</small>
+            CANCELAR / TERMINAR <small class="ms-2">[ESC]</small>
           </v-btn>
         </template>
 
@@ -358,6 +359,8 @@ const searchPostulant = async () => {
   }
   let res = await admitionService.searchPostulant(search.value);
 
+  
+
   if (res.ok) {
     if (res.status) {
       form.value.person = null;
@@ -375,7 +378,7 @@ const searchPostulant = async () => {
     } else {
       snakbar.value.show = true;
       snakbar.value.title = "Datos incorrectos";
-      snakbar.value.text = "Postulante no encontrado";
+      snakbar.value.text = res.message;
       snakbar.value.type = "red";
     }
   } else {

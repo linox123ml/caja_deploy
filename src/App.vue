@@ -9,7 +9,7 @@
       <v-chip label> Examen General 2023</v-chip>
       <v-spacer></v-spacer>
       <v-btn>
-        <a :href="baseUrl" target="blank" class="text-white"> Ir a caja </a>
+        <a :href="baseUrl" target="blank" class=" text-decoration-none text-white"> Ir a caja </a>
       </v-btn>
     </v-app-bar>
 
@@ -51,6 +51,12 @@
         </v-container>
       </v-main>
     </template>
+
+    <v-footer app absolute border>
+      <div class="text-center w-100 py-2">
+        {{ new Date().getFullYear() }} — <strong>OTI - UNA PUNO</strong>
+      </div>
+    </v-footer>
   </v-app>
 </template>
 <script setup>
