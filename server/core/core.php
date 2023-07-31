@@ -374,7 +374,9 @@ class CORE
             
             $sql = "insert into estudiante (num_mat,paterno,materno,nombres) ";
             $sql .= "values ('$codigo','$paterno','$materno','$nombres) ";
-            $unap->query($sql);
+            $res = $unap->query($sql);
+
+            var_dump($res);
 
             $sqlSelect = "select num_mat from estudiante ";
             $sqlSelect .= "where num_mat = '$person->codigo_ingreso';";
