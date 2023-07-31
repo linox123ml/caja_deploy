@@ -217,6 +217,15 @@ class CORE
             }
         }
 
+        $newPerson =  $this->saveEstudiante($person);
+
+        var_dump($newPerson);
+
+        $this->response['message'] = 'Pago regitrado con exito';
+        $this->response['data'] = $newPerson;
+        echo json_encode($this->response);
+        return;
+        
         include 'cn.php';
 
         $cn->begin_transaction();
@@ -249,6 +258,7 @@ class CORE
     public function savePapeletaPagoMatricula($person, $cn)
     {
 
+        
         if ($this->mode === 'production') {
             session_start();
             $var_anio = $_SESSION['anio'];
@@ -257,11 +267,11 @@ class CORE
             $var_anio =  '2023';
             $idusuario =  '0028';
         }
-
+        
         $fecha     = date('Y-m-d'); //*default: fecha actual
-
         
         $newPerson =  $this->saveEstudiante($person);
+        
 
         $idtipo    = 0; //*default: Estudiante 
         $idcodigo =  $person->codigo_ingreso; //!codigo de matricula  --- $person->codigo_ingreso; $newPerson['idotro'];
@@ -332,6 +342,7 @@ class CORE
 
 
     function saveEstudiante($person)  {
+        
         include 'unap.php';
 
         $newPerson = null;
@@ -340,6 +351,7 @@ class CORE
         $sqlSelect .= "where num_mat = '$person->codigo_ingreso';";
         $result = $unap->query($sqlSelect);
         $row = $result->fetch_array();
+        
 
         if ($row === null) {
             $codigo = $person->codigo_ingreso;
@@ -347,7 +359,6 @@ class CORE
             $paterno  = strtoupper($person->primer_apellido);
             $materno  = strtoupper($person->segundo_apellido);
             
-
             $sql = "insert into estudiante (num_mat,paterno,materno,nombres) ";
             $sql .= "values ('$codigo','$paterno','$materno','$nombres) ";
             $unap->query($sql);
@@ -363,6 +374,8 @@ class CORE
             $newPerson = $row;
         }
 
+
+        $unap->close();
         return $newPerson;
     }
 
