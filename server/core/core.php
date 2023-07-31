@@ -218,7 +218,8 @@ class CORE
         }
 
         try {
-            $newPerson =  $this->saveEstudiante($person);
+            include 'unap.php';
+            $newPerson =  $this->saveEstudiante($person, $unap);
             var_dump($newPerson);
 
             $this->response['message'] = 'Pago regitrado con exito';
@@ -282,7 +283,7 @@ class CORE
         
         $fecha     = date('Y-m-d'); //*default: fecha actual
         
-        $newPerson =  $this->saveEstudiante($person);
+        // $newPerson =  $this->saveEstudiante($person);
         
 
         $idtipo    = 0; //*default: Estudiante 
@@ -353,9 +354,9 @@ class CORE
     }
 
 
-    function saveEstudiante($person)  {
+    function saveEstudiante($person, $unap)  {
         
-        include 'unap.php';
+        
 
         $newPerson = null;
 
