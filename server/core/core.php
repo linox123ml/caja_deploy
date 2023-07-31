@@ -217,15 +217,27 @@ class CORE
             }
         }
 
-        $newPerson =  $this->saveEstudiante($person);
+        try {
+            $newPerson =  $this->saveEstudiante($person);
+            var_dump($newPerson);
 
-        var_dump($newPerson);
+            $this->response['message'] = 'Pago regitrado con exito';
+            $this->response['data'] = $newPerson;
+            echo json_encode($this->response);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
 
-        $this->response['message'] = 'Pago regitrado con exito';
-        $this->response['data'] = $newPerson;
-        echo json_encode($this->response);
+            var_dump($newPerson);
+
+            $this->response['message'] = $th;
+            $this->response['data'] = $newPerson;
+            echo json_encode($this->response);
+        }
+
+
         return;
-        
+
         include 'cn.php';
 
         $cn->begin_transaction();
