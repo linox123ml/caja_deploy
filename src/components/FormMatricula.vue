@@ -197,7 +197,7 @@ const urlBase = import.meta.env.VITE_APP_BASE_URL;
 const urlPrint = ref(null);
 
 const printPDF = (item) => {
-  urlPrint.value = urlBase + "php/pdf_papeleta.php?id=" + item.payPrint.idpadre;
+  urlPrint.value = urlBase + "php/pdf_papeleta.php?id=" + item.p000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ayPrint.idpadre;
   window.open(urlPrint.value);
 };
 
@@ -256,7 +256,7 @@ const savePay = async (item, index) => {
     snakbar.value.text = res.message;
     snakbar.value.type = "green";
     // payPrint.value = res.data;
-    hasPrint.value = true;
+    //hasPrint.value = true;
   } else {
     snakbar.value.show = true;
     snakbar.value.title = "Ocurrion un error";

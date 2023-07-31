@@ -299,7 +299,7 @@ class CORE
             'numero' => $numero,
             'clave' => $clave,
             'error' => $cn->error,
-            // 'newPerson' => $newPerson['idotro'],
+            'newPerson' => $newPerson,
         ];
 
         return $datos;
