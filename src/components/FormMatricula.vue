@@ -197,7 +197,7 @@ const urlBase = import.meta.env.VITE_APP_BASE_URL;
 const urlPrint = ref(null);
 
 const printPDF = (item) => {
-  urlPrint.value = urlBase + "php/pdf_papeleta.php?id=" + item.p000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ayPrint.idpadre;
+  urlPrint.value = urlBase + "php/pdf_papeleta.php?id=" + item.payPrint.idpadre;
   window.open(urlPrint.value);
 };
 
