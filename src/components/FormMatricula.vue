@@ -227,7 +227,7 @@ const searchIngresante = async () => {
     } else {
       snakbar.value.show = true;
       snakbar.value.title = "Datos incorrectos";
-      snakbar.value.text = res.mensaje;
+      snakbar.value.text = res.message;
       snakbar.value.type = "red";
     }
   } else {
