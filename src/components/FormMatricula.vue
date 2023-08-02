@@ -123,7 +123,6 @@
   <pre>
     {{ conceptItemsDefault }}
   </pre>
-
 </template>
 <script setup>
 import { ref, watch } from "vue";
@@ -224,7 +223,18 @@ const searchIngresante = async () => {
       form.value.details = null;
       form.value.person = res.data;
 
-      form.value.details = [...conceptItemsDefault];
+      form.value.details = [
+        {
+          value: "0091",
+          title: "Matricula",
+          price: 75.0,
+        },
+        {
+          value: "0225",
+          title: "Carné Universitario",
+          price: 11.5,
+        },
+      ];
 
       // conceptItems.value.forEach((item) => {
       //   form.value.details.push(item);
