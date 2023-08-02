@@ -120,9 +120,6 @@
       <v-btn @click="snakbar.show = false"> x </v-btn>
     </template>
   </v-snackbar>
-  <pre>
-    {{ conceptItemsDefault }}
-  </pre>
 </template>
 <script setup>
 import { ref, watch } from "vue";
