@@ -227,7 +227,7 @@ const searchIngresante = async () => {
       form.value.details = null;
       form.value.person = res.data;
 
-      form.value.details =  JSON.parse(JSON.stringify(conceptItemsDefault));
+      form.value.details =  JSON.parse(JSON.stringify(conceptItems.value));
       // conceptItems.value.forEach((item) => {
       //   form.value.details.push(item);
       // });
