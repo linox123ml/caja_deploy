@@ -165,11 +165,15 @@ const conceptItemsDefault = [
     value: "0091",
     title: "Matricula",
     price: 75.0,
+    hasPrint: false,
+    payPrint: null,
   },
   {
     value: "0225",
     title: "Carné Universitario",
     price: 11.5,
+    hasPrint: false,
+    payPrint: null,
   },
 ];
 
@@ -223,18 +227,8 @@ const searchIngresante = async () => {
       form.value.details = null;
       form.value.person = res.data;
 
-      form.value.details = [
-        {
-          value: "0091",
-          title: "Matricula",
-          price: 75.0,
-        },
-        {
-          value: "0225",
-          title: "Carné Universitario",
-          price: 11.5,
-        },
-      ];
+      form.value.details = conceptItemsDefault;
+
 
       // conceptItems.value.forEach((item) => {
       //   form.value.details.push(item);
