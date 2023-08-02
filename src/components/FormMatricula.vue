@@ -59,7 +59,7 @@
       <v-card class="border">
         <v-card-title class="font-weight-bold">
           {{
-            `${form.person.nro_documento} | ${form.person.nombres}  ${form.person.primer_apellido}  ${form.person.segundo_apellido}`
+            `${form.person.nro_documento} |   ${form.person.primer_apellido}  ${form.person.segundo_apellido} , ${form.person.nombres}` 
           }}
         </v-card-title>
         <v-divider></v-divider>
