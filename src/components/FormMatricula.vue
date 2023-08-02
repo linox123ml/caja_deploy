@@ -160,7 +160,7 @@ const snakbar = ref({
 const postulant = ref(null);
 const postulantLoading = ref(false);
 
-const conceptItems = ref([
+const conceptItemsDefault = [
   {
     value: "0091",
     title: "Matricula",
@@ -171,12 +171,11 @@ const conceptItems = ref([
     title: "Carné Universitario",
     price: 11.5,
   },
-]);
+];
 
-//tarifas carne : 0091, 0225
+const conceptItems = ref(conceptItemsDefault);
 
 const form = ref({
-  // code: "",
   person: postulant.value,
   details: [],
 });
@@ -224,9 +223,11 @@ const searchIngresante = async () => {
       form.value.details = [];
       form.value.person = res.data;
 
-      conceptItems.value.forEach((item) => {
-        form.value.details.push(item);
-      });
+      form.value.details = conceptItemsDefault;
+
+      // conceptItems.value.forEach((item) => {
+      //   form.value.details.push(item);
+      // });
     } else {
       snakbar.value.show = true;
       snakbar.value.title = "Datos incorrectos";
