@@ -224,7 +224,7 @@ const searchIngresante = async () => {
       form.value.details = [];
       form.value.person = res.data;
 
-      form.value.details = conceptItemsDefault;
+      form.value.details = [...conceptItemsDefault];
 
       // conceptItems.value.forEach((item) => {
       //   form.value.details.push(item);
