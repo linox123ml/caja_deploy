@@ -121,8 +121,9 @@
     </template>
   </v-snackbar>
   <pre>
-    {{ form.details }}
+    {{ conceptItemsDefault }}
   </pre>
+
 </template>
 <script setup>
 import { ref, watch } from "vue";
