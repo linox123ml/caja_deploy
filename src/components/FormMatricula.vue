@@ -244,6 +244,9 @@ const searchIngresante = async () => {
 };
 
 const savePay = async (item, index) => {
+
+  form.value.details[index].loading = true;
+
   let data = {
     details: [item],
     person: form.value.person,
@@ -267,5 +270,8 @@ const savePay = async (item, index) => {
     snakbar.value.text = res.message;
     snakbar.value.type = "red";
   }
+
+  form.value.details[index].loading = false;
+
 };
 </script>
