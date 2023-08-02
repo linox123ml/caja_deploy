@@ -221,7 +221,7 @@ const searchIngresante = async () => {
   if (res.ok) {
     if (res.status) {
       form.value.person = null;
-      form.value.details = [];
+      form.value.details = null;
       form.value.person = res.data;
 
       form.value.details = [...conceptItemsDefault];
