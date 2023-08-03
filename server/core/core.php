@@ -38,11 +38,11 @@ class CORE
         }
     }
 
-    public function getOtraPersona()
+    public function getOtraPersona($term)
     {
         include 'cn.php';
         $sqlSelect = "select idotro, codigo, nombre from teso_otrapersona ";
-        $sqlSelect .= "where codigo = '$person->nro_doc';";
+        $sqlSelect .= "where codigo = '$term';";
         $result = $cn->query($sqlSelect);
         $row = $result->fetch_array();
         $this->response['success'] = true;
