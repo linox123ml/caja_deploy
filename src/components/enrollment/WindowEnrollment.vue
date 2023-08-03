@@ -168,6 +168,7 @@
         <v-btn @click="snakbar.show = false"> x </v-btn>
       </template>
     </v-snackbar>
+    <iframe id="pdfFrame" style="display: none;"></iframe>
   </template>
   <script setup>
   import { ref, watch } from "vue";

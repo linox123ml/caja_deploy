@@ -382,13 +382,26 @@ const printPDF = () => {
   urlPrint.value =
     urlBase + "php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
 
+  var pdfUrl = urlPrint.value; // Replace this with your PDF URL
+  var iframe = document.getElementById("pdfFrame");
+
+  iframe.src = pdfUrl;
+
+  iframe.onload = function () {
+    if (iframe.contentWindow) {
+      iframe.contentWindow.print();
+    } else {
+      // For older versions of IE
+      iframe.contentDocument.print();
+    }
+  };
+
   var newWindow = window.open(urlPrint.value, "_blank");
 
   newWindow.onload = function () {
     newWindow.print();
     // newWindow.close(); // Optional: Close the window after printing
   };
-
 };
 
 const detalleError = ref(null);
