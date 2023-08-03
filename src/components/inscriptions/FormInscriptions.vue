@@ -94,9 +94,7 @@
       <v-card class="border">
         <v-card-title class="font-weight-bold">
           <small>
-            {{
-              `${form.person.nro_doc} | ${form.person.nombres}  ${form.person.primer_apellido}  ${form.person.segundo_apellido}`
-            }}
+            {{ `${form.person.nro_doc} | ${form.person.nombres}` }}
           </small>
         </v-card-title>
         <v-divider></v-divider>
@@ -186,19 +184,9 @@
           />
 
           <v-text-field
-            v-model="formPerson.primer_apellido"
+            v-model="formPerson.apellidos"
             density="compact"
-            placeholder="Apellido Paterno"
-            hide-details="auto"
-            variant="outlined"
-            :rules="rulesF"
-            class="my-3"
-          />
-
-          <v-text-field
-            v-model="formPerson.segundo_apellido"
-            density="compact"
-            placeholder="Apellido Materno"
+            placeholder="Apellidos"
             hide-details="auto"
             variant="outlined"
             :rules="rulesF"
@@ -242,8 +230,7 @@ const emit = defineEmits(["onSuccess"]);
 
 const formPerson = ref({
   nro_doc: null,
-  primer_apellido: null,
-  segundo_apellido: null,
+  apellidos: null,
   nombres: null,
   pagos: [],
 });
@@ -364,8 +351,7 @@ const restForm = () => {
   form.value.person = null;
   form.value.details = [];
   formPerson.value.nro_doc = null;
-  formPerson.value.primer_apellido = null;
-  formPerson.value.segundo_apellido = null;
+  formPerson.value.apellidos = null;
   formPerson.value.nombres = null;
   formPerson.value.pagos = [];
   payPrint.value = null;
@@ -422,7 +408,9 @@ const savePerson = async () => {
     return;
   }
   form.value.person = null;
-  form.value.person = formPerson.value;
+  form.value.person.nro_doc = formPerson.value.nro_doc;
+  form.value.person.nombres =
+    formPerson.value.apellidos + " " + formPerson.value.nombres;
   form.value.details = [];
 
   dialogPostulant.value = false;
@@ -430,9 +418,22 @@ const savePerson = async () => {
 
 const searchOtherPerson = async (term) => {
   let res = await payService.getOtherPerson(term);
-  console.log(res);
-}
+  if (res.status) {
+    form.value.person = null;
+    form.value.details = [];
 
+    let person = res.data;
+
+    form.value.person.nro_doc = person.codigo;
+    form.value.person.nombres = person.nombre;
+  } else {
+    snakbar.value.show = true;
+    snakbar.value.title = res.message;
+    snakbar.value.text =
+      "Postulante no PRE-INSCRITO ... Buscando en OTRAS PERSONAS";
+    snakbar.value.type = "warning";
+  }
+};
 
 const searchPostulant = async () => {
   postulantLoading.value = true;
@@ -452,7 +453,14 @@ const searchPostulant = async () => {
     if (res.status) {
       form.value.person = null;
       form.value.details = [];
-      form.value.person = res.data;
+      let person = res.data;
+      form.value.person.nro_doc = person.nro_doc;
+      form.value.person.nombres =
+        person.primer_apellido +
+        " " +
+        person.segundo_apellido +
+        " " +
+        person.nombres;
 
       res.data.pagos.forEach((item) => {
         let pago = conceptItems.value.find(
@@ -463,20 +471,24 @@ const searchPostulant = async () => {
           form.value.details.push(pago);
         }
       });
+      postulantLoading.value = false;
+      return;
     } else {
-
-      await searchOtherPerson(search.value);
       snakbar.value.show = true;
       snakbar.value.title = res.message;
-      snakbar.value.text = "Postulante no PRE-INSCRITO ... Buscando en OTRAS PERSONAS";
+      snakbar.value.text =
+        "Postulante no PRE-INSCRITO ... Buscando en OTRAS PERSONAS";
       snakbar.value.type = "warning";
     }
   } else {
     snakbar.value.show = true;
-    snakbar.value.title = "Error:";
-    snakbar.value.text = "(a)  Error Desconocido";
+    snakbar.value.title = "(a) Error Desconocido:";
+    snakbar.value.text = " ... Buscando en OTRAS PERSONAS";
     snakbar.value.type = "red";
   }
+
+  await searchOtherPerson(search.value);
+
   postulantLoading.value = false;
 };
 

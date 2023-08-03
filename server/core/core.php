@@ -113,7 +113,7 @@ class CORE
         $idtipo    = 4; //*default: otra persona 
         $idcodigo = $newPerson['idotro'];
         $codigo    = $person->nro_doc;
-        $nombre    = $person->nombres . ' ' . $person->primer_apellido  . ' ' .  $person->segundo_apellido;
+        $nombre    = $person->nombres;
         $clave = $this->generar_clave();
         $obs    = ""; //*default: sin observaciones
 
@@ -190,7 +190,7 @@ class CORE
 
         if ($row === null) {
             $codigo = $person->nro_doc;
-            $nombre =  strtoupper($person->nombres . ' ' . $person->primer_apellido  . ' ' .  $person->segundo_apellido);
+            $nombre =  strtoupper($person->nombres);
             $direccion  = null;
             $email  = null;
             $telefono   = null;
@@ -280,7 +280,7 @@ class CORE
         $idtipo    = 0; //*default: Estudiante 
         $idcodigo =  $person->codigo_ingreso; //!codigo de matricula  --- $person->codigo_ingreso; $newPerson['idotro'];
         $codigo    = $person->codigo_ingreso;
-        $nombre    = $person->nombres . ' ' . $person->primer_apellido  . ' ' .  $person->segundo_apellido;
+        $nombre    = $person->nombres;
         $clave = $this->generar_clave();
         $obs    = ""; //*default: sin observaciones
 

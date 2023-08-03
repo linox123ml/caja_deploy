@@ -6,7 +6,7 @@ export default class PayService {
       let res = await httpService4.post(`consulta_caja/${code}`);
       return res.data;
     } catch (error) {
-      return res.data;
+      return error.data;
     }
   };
 
@@ -15,7 +15,7 @@ export default class PayService {
       let res = await server.get(`otrapersona/?term=${term}`);
       return res.data;
     } catch (error) {
-      return res.data;
+      return error.data;
     }
   };
 
@@ -39,7 +39,7 @@ export default class PayService {
       let res = await server.post("papeletamatricula/", formData);
       return res.data;
     } catch (error) {
-      return res.data;
+      return error.data;
     }
   };
 }
