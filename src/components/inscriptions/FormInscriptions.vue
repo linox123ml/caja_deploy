@@ -418,12 +418,13 @@ const savePerson = async () => {
 
 const searchOtherPerson = async (term) => {
   let res = await payService.getOtherPerson(term);
+
+  console.log('-->', res);
+
   if (res.status) {
     form.value.person = null;
     form.value.details = [];
-
     let person = res.data;
-
     form.value.person.nro_doc = person.codigo;
     form.value.person.nombres = person.nombre;
   } else {
@@ -447,6 +448,7 @@ const searchPostulant = async () => {
     postulantLoading.value = false;
     return;
   }
+
   let res = await admitionService.searchPostulant(search.value);
 
   if (res.ok) {
