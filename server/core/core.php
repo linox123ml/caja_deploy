@@ -38,6 +38,19 @@ class CORE
         }
     }
 
+    public function getOtraPersona()
+    {
+        include 'cn.php';
+        $sqlSelect = "select idotro, codigo, nombre from teso_otrapersona ";
+        $sqlSelect .= "where codigo = '$person->nro_doc';";
+        $result = $cn->query($sqlSelect);
+        $row = $result->fetch_array();
+        $this->response['success'] = true;
+        $this->response['message'] = 'Otra persona encontrad(a)'; 
+        $this->response['data'] = $row;
+        echo json_encode($this->response);
+    }
+
     //*Pagos inscripcion
     public function savePago($person, $details)
     {
@@ -249,7 +262,7 @@ class CORE
     public function savePapeletaPagoMatricula($person, $cn)
     {
 
-        
+
         if ($this->mode === 'production') {
             session_start();
             $var_anio = $_SESSION['anio'];
@@ -258,11 +271,11 @@ class CORE
             $var_anio =  '2023';
             $idusuario =  '0028';
         }
-        
+
         $fecha     = date('Y-m-d'); //*default: fecha actual
-        
+
         $newPerson =  $this->saveEstudiante($person);
-        
+
 
         $idtipo    = 0; //*default: Estudiante 
         $idcodigo =  $person->codigo_ingreso; //!codigo de matricula  --- $person->codigo_ingreso; $newPerson['idotro'];
@@ -331,9 +344,9 @@ class CORE
         $cn->query($sql);
     }
 
+    function saveEstudiante($person)
+    {
 
-    function saveEstudiante($person)  {
-        
         include 'unap.php';
 
         $newPerson = null;
@@ -342,14 +355,14 @@ class CORE
         $sqlSelect .= "where num_mat = '$person->codigo_ingreso';";
         $result = $unap->query($sqlSelect);
         $row = $result->fetch_array();
-        
+
 
         if ($row === null) {
             $codigo = $person->codigo_ingreso;
             $nombres =  strtoupper($person->nombres);
             $paterno  = strtoupper($person->primer_apellido);
             $materno  = strtoupper($person->segundo_apellido);
-            
+
             $sql = "insert into estudiante (num_mat,paterno,materno,nombres) ";
             $sql .= "values ('$codigo','$paterno','$materno','$nombres') ";
             $unap->query($sql);
@@ -367,7 +380,6 @@ class CORE
         $unap->close();
         return $newPerson;
     }
-
 
     protected function generar_clave()
     {

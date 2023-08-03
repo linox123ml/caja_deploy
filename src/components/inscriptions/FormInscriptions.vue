@@ -186,16 +186,6 @@
           />
 
           <v-text-field
-            v-model="formPerson.nombres"
-            density="compact"
-            placeholder="Nombres"
-            hide-details="auto"
-            variant="outlined"
-            :rules="rulesF"
-            class="my-3"
-          />
-
-          <v-text-field
             v-model="formPerson.primer_apellido"
             density="compact"
             placeholder="Apellido Paterno"
@@ -214,6 +204,16 @@
             :rules="rulesF"
             class="my-3"
           />
+
+          <v-text-field
+            v-model="formPerson.nombres"
+            density="compact"
+            placeholder="Nombres"
+            hide-details="auto"
+            variant="outlined"
+            :rules="rulesF"
+            class="my-3"
+          />
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -226,7 +226,7 @@
     </v-card>
   </v-dialog>
 
-  <iframe id="pdfFrame" style="display: none;"></iframe>
+  <iframe id="pdfFrame" style="display: none"></iframe>
 </template>
 <script setup>
 import { computed, ref, watch, watchEffect } from "vue";
@@ -393,11 +393,9 @@ const printPDF = () => {
     if (iframe.contentWindow) {
       iframe.contentWindow.print();
     } else {
-      // For older versions of IE
       iframe.contentDocument.print();
     }
   };
-
 };
 
 const detalleError = ref(null);
@@ -430,6 +428,12 @@ const savePerson = async () => {
   dialogPostulant.value = false;
 };
 
+const searchOtherPerson = async (term) => {
+  let res = await payService.getOtherPerson(term);
+  console.log(res);
+}
+
+
 const searchPostulant = async () => {
   postulantLoading.value = true;
 
@@ -460,10 +464,12 @@ const searchPostulant = async () => {
         }
       });
     } else {
+
+      await searchOtherPerson(search.value);
       snakbar.value.show = true;
-      snakbar.value.title = "Datos incorrectos";
-      snakbar.value.text = res.message;
-      snakbar.value.type = "red";
+      snakbar.value.title = res.message;
+      snakbar.value.text = "Postulante no PRE-INSCRITO ... Buscando en OTRAS PERSONAS";
+      snakbar.value.type = "warning";
     }
   } else {
     snakbar.value.show = true;
