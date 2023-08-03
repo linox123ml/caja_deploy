@@ -420,9 +420,6 @@ const savePerson = async () => {
 
 const searchOtherPerson = async (term) => {
   let res = await payService.getOtherPerson(term);
-
-  console.log("-->", res);
-
   if (res.success) {
     form.value.person = { nro_doc: '', nombres: '' };
     form.value.details = [];
@@ -470,7 +467,7 @@ const searchPostulant = async () => {
           (element) => item.cod === element.codeBN
         );
         if (pago) {
-          console.log(pago.price);
+   
           form.value.details.push(pago);
         }
       });
