@@ -421,7 +421,7 @@ const searchOtherPerson = async (term) => {
 
   console.log('-->', res);
 
-  if (res.status) {
+  if (res.success) {
     form.value.person = null;
     form.value.details = [];
     let person = res.data;
