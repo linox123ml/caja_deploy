@@ -217,7 +217,7 @@
     {
       value: "0225",
       title: "Carné Universitario",
-      price: 11.5,
+      price: 12.5,
       hasPrint: false,
       payPrint: null,
     },
