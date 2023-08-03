@@ -386,7 +386,7 @@ const printPDF = () => {
 
   newWindow.onload = function () {
     newWindow.print();
-    newWindow.close(); // Optional: Close the window after printing
+    // newWindow.close(); // Optional: Close the window after printing
   };
 
 };
