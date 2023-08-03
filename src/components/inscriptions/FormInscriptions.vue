@@ -398,12 +398,6 @@ const printPDF = () => {
     }
   };
 
-  var newWindow = window.open(urlPrint.value, "_blank");
-
-  newWindow.onload = function () {
-    newWindow.print();
-    // newWindow.close(); // Optional: Close the window after printing
-  };
 };
 
 const detalleError = ref(null);
