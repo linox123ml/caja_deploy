@@ -361,6 +361,11 @@ const restForm = () => {
   form.value.code = null;
   form.value.person = null;
   form.value.details = [];
+  formPerson.value.nro_doc = null;
+  formPerson.value.primer_apellido = null;
+  formPerson.value.segundo_apellido = null;
+  formPerson.value.nombres = null;
+  formPerson.value.pagos = [];
   payPrint.value = null;
   hasPrint.value = false;
   search.value = null;
@@ -377,7 +382,7 @@ const printPDF = () => {
   urlPrint.value =
     urlBase + "php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
 
-  window.open(urlPrint.value);
+  window.print(urlPrint.value);
 };
 
 const detalleError = ref(null);
