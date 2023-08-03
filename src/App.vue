@@ -9,7 +9,13 @@
       <v-chip label> Examen General 2023</v-chip>
       <v-spacer></v-spacer>
       <v-btn>
-        <a :href="baseUrl" target="blank" class=" text-decoration-none text-white"> Ir a caja </a>
+        <a
+          :href="baseUrl"
+          target="blank"
+          class="text-decoration-none text-white"
+        >
+          Ir a caja
+        </a>
       </v-btn>
     </v-app-bar>
 
@@ -35,17 +41,17 @@
       <v-main>
         <v-toolbar>
           <v-tabs v-model="tab">
-            <v-tab value="ins"> Inscripciones </v-tab>
-            <v-tab value="mat"> Matriculas </v-tab>
+            <v-tab value="inscription"> Inscripciones </v-tab>
+            <v-tab value="enrollment"> Matriculas </v-tab>
           </v-tabs>
         </v-toolbar>
         <v-container>
           <v-window v-model="tab">
-            <v-window-item value="ins">
-              <SearchPostulant />
+            <v-window-item value="inscription">
+              <WindowInscriptions />
             </v-window-item>
-            <v-window-item value="mat">
-              <FormMatricula />
+            <v-window-item value="enrollment">
+              <WindowEnrollment />
             </v-window-item>
           </v-window>
         </v-container>
@@ -61,13 +67,13 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import SearchPostulant from "@/components/SearchPostulant.vue";
-import FormMatricula from "@/components/FormMatricula.vue";
 import { AuthService } from "./services/index";
+import WindowInscriptions from "./components/inscriptions/WindowInscriptions.vue";
+import WindowEnrollment from "./components/enrollment/WindowEnrollment.vue";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
-const tab = ref("ins");
+const tab = ref("inscription");
 
 const authService = new AuthService();
 const isLogged = ref(true);
@@ -81,14 +87,3 @@ const init = async () => {
 
 init();
 </script>
-
-<style>
-.app-wrapper {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: azure;
-}
-</style>

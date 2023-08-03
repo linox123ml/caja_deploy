@@ -1,6 +1,15 @@
-import { server } from "../utils/https";
+import { httpService4, server } from "../utils/https";
 
 export default class PayService {
+  getRegularStudent = async (code) => {
+    try {
+      let res = await httpService4.post(`consulta_caja/${code}`);
+      return res.data;
+    } catch (error) {
+      return res.data;
+    }
+  };
+
   savePay = async (data) => {
     try {
       let formData = new FormData();
