@@ -225,6 +225,8 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <iframe id="pdfFrame" style="display: none;"></iframe>
 </template>
 <script setup>
 import { computed, ref, watch, watchEffect } from "vue";
