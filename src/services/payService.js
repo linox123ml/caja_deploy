@@ -12,7 +12,7 @@ export default class PayService {
 
   getOtherPerson = async (term) => {
     try {
-      let res = await server.post(`otrapersona/?term=${term}`);
+      let res = await server.get(`otrapersona/?term=${term}`);
       return res.data;
     } catch (error) {
       return res.data;
