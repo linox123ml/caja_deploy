@@ -407,7 +407,9 @@ const savePerson = async () => {
 
     return;
   }
+
   form.value.person = null;
+
   form.value.person.nro_doc = formPerson.value.nro_doc;
   form.value.person.nombres =
     formPerson.value.apellidos + " " + formPerson.value.nombres;
@@ -419,10 +421,10 @@ const savePerson = async () => {
 const searchOtherPerson = async (term) => {
   let res = await payService.getOtherPerson(term);
 
-  console.log('-->', res);
+  console.log("-->", res);
 
   if (res.success) {
-    form.value.person = null;
+    form.value.person = { nro_doc: '', nombres: '' };
     form.value.details = [];
     let person = res.data;
     form.value.person.nro_doc = person.codigo;
@@ -453,16 +455,15 @@ const searchPostulant = async () => {
 
   if (res.ok) {
     if (res.status) {
-      form.value.person = null;
+      form.value.person = { nro_doc: null, nombres: null };
       form.value.details = [];
-      let person = res.data;
-      form.value.person.nro_doc = person.nro_doc;
+      form.value.person.nro_doc = res.data?.nro_doc;
       form.value.person.nombres =
-        person.primer_apellido +
+        res.data.primer_apellido +
         " " +
-        person.segundo_apellido +
+        res.data.segundo_apellido +
         " " +
-        person.nombres;
+        res.data.nombres;
 
       res.data.pagos.forEach((item) => {
         let pago = conceptItems.value.find(
