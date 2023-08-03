@@ -382,8 +382,7 @@ const printPDF = () => {
   urlPrint.value =
     urlBase + "php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
 
-  // var W = window.screen(urlPrint.value);
-  urlPrint.value.window.print();
+  window.print(urlPrint.value);
 };
 
 const detalleError = ref(null);
