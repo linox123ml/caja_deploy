@@ -408,7 +408,7 @@ const savePerson = async () => {
     return;
   }
 
-  form.value.person = null;
+  form.value.person = { nro_doc: '', nombres: '' };
 
   form.value.person.nro_doc = formPerson.value.nro_doc;
   form.value.person.nombres =
