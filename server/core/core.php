@@ -388,6 +388,30 @@ class CORE
         return $newPerson;
     }
 
+    function getConceptos($term)
+    {
+        include 'cn.php';
+
+        $query = `SELECT idtarifa, codigo, destarifa
+                 FROM teso_tarifascaja
+                 WHERE destarifa LIKE '%$term%';`;
+
+        $result = $cn->query($query);
+        $res = $result->fetch_assoc(MYSQLI_ASSOC);
+
+        if (count($res) > 0) {
+            $this->response['success'] = false;
+            $this->response['message'] = 'Otra persona NO encontrad(a)';
+            $this->response['data'] = null;
+            echo json_encode($this->response);
+        } else {
+            $this->response['success'] = true;
+            $this->response['message'] = 'Otra persona encontrad(a)';
+            $this->response['data'] = $res;
+            echo json_encode($this->response);
+        }
+    }
+
     protected function generar_clave()
     {
         $caracteres = "abcdefghijklmnopqrstuvwxyz1234567890"; //posibles caracteres a usar

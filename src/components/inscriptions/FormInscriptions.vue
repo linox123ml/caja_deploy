@@ -146,7 +146,13 @@
             </v-btn>
           </template>
           <template v-else>
-            <v-btn block variant="flat" color="success" @click="savePay" :loading="loadingPay">
+            <v-btn
+              block
+              variant="flat"
+              color="success"
+              @click="savePay"
+              :loading="loadingPay"
+            >
               Pagar <small class="ms-3">[ ESPACIO + P ]</small>
             </v-btn>
           </template>
@@ -207,7 +213,7 @@
       <v-card-actions>
         <v-btn color="red" @click="dialogPostulant = false"> cancelar </v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="blue-darken-4" variant="tonal" @click="savePerson" >
+        <v-btn color="blue-darken-4" variant="tonal" @click="savePerson">
           Guardar
         </v-btn>
       </v-card-actions>
@@ -407,21 +413,18 @@ const savePerson = async () => {
 
     return;
   }
-
-  form.value.person = { nro_doc: '', nombres: '' };
-
+  form.value.person = { nro_doc: "", nombres: "" };
   form.value.person.nro_doc = formPerson.value.nro_doc;
   form.value.person.nombres =
     formPerson.value.apellidos + " " + formPerson.value.nombres;
   form.value.details = [];
-
   dialogPostulant.value = false;
 };
 
 const searchOtherPerson = async (term) => {
   let res = await payService.getOtherPerson(term);
   if (res.success) {
-    form.value.person = { nro_doc: '', nombres: '' };
+    form.value.person = { nro_doc: "", nombres: "" };
     form.value.details = [];
     let person = res.data;
     form.value.person.nro_doc = person.codigo;
@@ -429,7 +432,7 @@ const searchOtherPerson = async (term) => {
   } else {
     snakbar.value.show = true;
     snakbar.value.text = res.message;
-    snakbar.value.title ="Sin resultados";
+    snakbar.value.title = "Sin resultados";
     snakbar.value.type = "red";
   }
 };
@@ -466,7 +469,6 @@ const searchPostulant = async () => {
           (element) => item.cod === element.codeBN
         );
         if (pago) {
-   
           form.value.details.push(pago);
         }
       });
@@ -491,8 +493,7 @@ const searchPostulant = async () => {
   postulantLoading.value = false;
 };
 
-
-const loadingPay =  ref(false);
+const loadingPay = ref(false);
 
 const savePay = async () => {
   payPrint.value = null;
@@ -505,7 +506,7 @@ const savePay = async () => {
     snakbar.value.title = "Error";
     snakbar.value.text = "Seleccion al menos un concepto de pago";
     snakbar.value.type = "red";
-  loadingPay.value = false;
+    loadingPay.value = false;
 
     return;
   }
@@ -528,6 +529,5 @@ const savePay = async () => {
   }
 
   loadingPay.value = false;
-
 };
 </script>
