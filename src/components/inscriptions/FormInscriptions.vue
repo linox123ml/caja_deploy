@@ -146,7 +146,7 @@
             </v-btn>
           </template>
           <template v-else>
-            <v-btn block variant="flat" color="success" @click="savePay">
+            <v-btn block variant="flat" color="success" @click="savePay" :loading="loadingPay">
               Pagar <small class="ms-3">[ ESPACIO + P ]</small>
             </v-btn>
           </template>
@@ -207,7 +207,7 @@
       <v-card-actions>
         <v-btn color="red" @click="dialogPostulant = false"> cancelar </v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="blue-darken-4" variant="tonal" @click="savePerson" :loading="loadingPay">
+        <v-btn color="blue-darken-4" variant="tonal" @click="savePerson" >
           Guardar
         </v-btn>
       </v-card-actions>

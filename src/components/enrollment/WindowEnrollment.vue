@@ -357,6 +357,7 @@ const searchRegular = async () => {
   postulantLoading.value = false;
 };
 
+
 const savePay = async (item, index) => {
   form.value.details[index].loading = true;
 
