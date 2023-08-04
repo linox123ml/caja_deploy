@@ -152,6 +152,7 @@ const conceptItemsDefault = [
   {
     value: "0091",
     title: "Por creditos desaprobados",
+    detail: "CREDITOS DESAPROBADOS",
     price: 0.0,
     hasPrint: false,
     payPrint: null,
@@ -161,6 +162,7 @@ const conceptItemsDefault = [
   {
     value: "0091",
     title: "Reserva de matricula",
+    detail: "RESERVA DE MATRICULA",
     price: 33.0,
     hasPrint: false,
     payPrint: null,

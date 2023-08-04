@@ -164,8 +164,9 @@ const conceptItemsDefault = [
     payPrint: null,
   },
   {
-    value: "0225",
+    value: "0091",
     title: "Reserva de matricula",
+    detail: "RESERVA DE MATRICULA",
     price: 33.0,
     hasPrint: false,
     payPrint: null,

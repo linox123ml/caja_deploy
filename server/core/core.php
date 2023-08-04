@@ -285,9 +285,9 @@ class CORE
 
 
         $idtipo    = 0; //*default: Estudiante 
-        $idcodigo =  $person->codigo_ingreso; //!codigo de matricula  --- $person->codigo_ingreso; $newPerson['idotro'];
+        $idcodigo =  $person->codigo_ingreso; 
         $codigo    = $person->codigo_ingreso;
-        $nombre    = $person->nombres;
+        $nombre    = $person->nombres  .' '. $person->primer_apellido . '  '.  $person->segundo_apellido ;
         $clave = $this->generar_clave();
         $obs    = ""; //*default: sin observaciones
 
@@ -333,7 +333,7 @@ class CORE
         $idtarifa = $detail->value;
         $cantidad = 1; //*Default: 1
         $precio = $detail->price;
-        // $detalle = $detail->title;
+        $detalle = $detail->detail;
         $detalle = '';
 
         $sql = "insert into teso_papeletatarifas (idpapeleta,idtarifa,cantidad,precio,detalle) ";
