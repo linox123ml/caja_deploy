@@ -45,10 +45,17 @@ class CORE
         $sqlSelect .= "where codigo = '$term';";
         $result = $cn->query($sqlSelect);
         $row = $result->fetch_array();
-        $this->response['success'] = true;
-        $this->response['message'] = 'Otra persona encontrad(a)'; 
-        $this->response['data'] = $row;
-        echo json_encode($this->response);
+        if ($row === null) {
+            $this->response['success'] = false;
+            $this->response['message'] = 'Otra persona NO encontrad(a)';
+            $this->response['data'] = null;
+            echo json_encode($this->response);
+        } else {
+            $this->response['success'] = true;
+            $this->response['message'] = 'Otra persona encontrad(a)';
+            $this->response['data'] = $row;
+            echo json_encode($this->response);
+        }
     }
 
     //*Pagos inscripcion
