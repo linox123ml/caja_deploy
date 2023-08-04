@@ -165,7 +165,7 @@ const postulantLoading = ref(false);
 const conceptItemsDefault = [
   {
     value: "0091",
-    title: "Por creditos",
+    title: "Pago por creditos",
     detail: "CRÉDITOS POR SEGUNDA CARRERA",
     price: 0.0,
     hasPrint: false,
@@ -176,8 +176,8 @@ const conceptItemsDefault = [
   {
     value: "0091",
     codeBN: 26,
-    title: "Pago por concepto de matricula",
-    detail: "Matrículas SEGUNDA CARRERA",
+    title: "Matriculas SEGUNDA CARRERA",
+    detail: "Matriculas SEGUNDA CARRERA",
     price: 50.0,
     options: [
       {
