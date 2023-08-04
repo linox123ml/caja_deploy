@@ -5,8 +5,8 @@
     style="max-width: 600px"
   >
     <v-container>
-      <v-form ref="formSearch" @submit.prevent="searchIngresante">
-        <div class="text-subtitle-1 mb-1">Buscar / DNI</div>
+      <v-form ref="formSearch" @submit.prevent="searchStudent">
+        <div class="text-subtitle-1 mb-1">Ingrese codigo de matricula</div>
         <v-text-field
           v-model="search"
           density="compact"
@@ -15,7 +15,7 @@
           variant="outlined"
           :rules="rules"
           counter
-          maxlength="8"
+          maxlength="6"
           ref="inputSearch"
           :disabled="form.person ? true : false"
         />
@@ -53,7 +53,7 @@
       <v-card class="border">
         <v-card-title class="font-weight-bold bg-grey">
           {{
-            `${form.person.nro_documento} | ${form.person.primer_apellido}  ${form.person.segundo_apellido} , ${form.person.nombres}`
+            `${form.person.id} | ${form.person.lastname}  ${form.person.mlastname} , ${form.person.firstname}`
           }}
         </v-card-title>
         <v-divider></v-divider>
@@ -119,9 +119,9 @@ import { ref, watch } from "vue";
 import { AdmitionService, PayService } from "@/services/";
 import { useMagicKeys } from "@vueuse/core";
 
-const emit = defineEmits(["onSuccess", "showMessage"]);
 const { escape } = useMagicKeys();
 
+const emit = defineEmits(["onSuccess"]);
 
 const admitionService = new AdmitionService();
 const payService = new PayService();
@@ -151,18 +151,14 @@ const postulantLoading = ref(false);
 const conceptItemsDefault = [
   {
     value: "0091",
-    title: "Matricula",
-    price: 75.0,
+    title: "Por creditos desaprobados",
+    detail: "CREDITOS DESAPROBADOS",
+    price: 0.0,
     hasPrint: false,
     payPrint: null,
+    // isEdit: true,
   },
-  {
-    value: "0225",
-    title: "Carné Universitario",
-    price: 12.5,
-    hasPrint: false,
-    payPrint: null,
-  },
+
   {
     value: "0091",
     title: "Reserva de matricula",
@@ -171,12 +167,29 @@ const conceptItemsDefault = [
     hasPrint: false,
     payPrint: null,
   },
+
+  //   {
+  //     value: "0225",
+  //     title: "Amnistia para continuar estudios",
+  //     price: 200.0,
+  //     hasPrint: false,
+  //     payPrint: null,
+  //     isEdit: true,
+  //   },
 ];
 
 const conceptItems = ref(conceptItemsDefault);
 
+const defaultPerson = {
+  id: null,
+  firstname: null,
+  lastname: null,
+  mlastname: null,
+  academyData: null,
+};
+
 const form = ref({
-  person: postulant.value,
+  person: null,
   details: [],
 });
 
@@ -213,30 +226,31 @@ const printPDF = (item) => {
   };
 };
 
-const searchIngresante = async () => {
+const searchStudent = async () => {
   postulantLoading.value = true;
 
   const { valid } = await formSearch.value.validate();
   if (!valid) {
     snakbar.value.show = true;
     snakbar.value.title = "Error";
-    snakbar.value.text = "Ingrese un DNI valido (8 digitos )";
+    snakbar.value.text = "Ingrese un Codigo valido (6 digitos )";
     snakbar.value.type = "red";
     postulantLoading.value = false;
     return;
   }
-  let res = await admitionService.getEntrantsPayMat(search.value);
+
+  let res = await payService.getConditionStudent(search.value);
+
+  console.log(res);
 
   if (res.ok) {
-    if (res.status) {
+    if (res.success) {
       form.value.person = null;
       form.value.details = null;
-      form.value.person = res.data;
-
+      form.value.person = defaultPerson;
+      form.value.person = res.data[0];
       form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
-      // conceptItems.value.forEach((item) => {
-      //   form.value.details.push(item);
-      // });
+      form.value.details[0].price = res.data[0].amount;
     } else {
       snakbar.value.show = true;
       snakbar.value.title = "Datos incorrectos";
@@ -254,10 +268,19 @@ const searchIngresante = async () => {
 
 const savePay = async (item, index) => {
   form.value.details[index].loading = true;
+
+  let person = {
+    codigo_ingreso: form.value.person.id,
+    nombres: form.value.person.firstname,
+    primer_apellido: form.value.person.lastname,
+    segundo_apellido: form.value.person.mlastname,
+  };
+
   let data = {
     details: [item],
-    person: form.value.person,
+    person: person,
   };
+
   let res = await payService.savePayMat(data);
 
   if (res.success) {

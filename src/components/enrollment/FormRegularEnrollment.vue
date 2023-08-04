@@ -113,6 +113,21 @@
       </v-card>
     </v-col>
   </v-row>
+
+  <v-dialog v-model="isBlocked">
+    <v-card theme="dark" class="mx-auto" width="600px" rounded="lg">
+      <v-container>
+        <h3><small> Codido:</small> {{ isBlockedData[0].id }}</h3>
+        <h3><small> Nombre:</small> {{ isBlockedData[0].fullname }}</h3>
+        <h3><small> Escuela:</small> {{ isBlockedData[0].academyData }}</h3>
+        <div class="w-full d-flex py-3">
+          <v-chip label class="text-h6 text-uppercase mx-auto" color="red">{{
+            isBlockedData[0].status
+          }}</v-chip>
+        </div>
+      </v-container>
+    </v-card>
+  </v-dialog>
 </template>
 <script setup>
 import { ref, watch } from "vue";
@@ -121,9 +136,8 @@ import { useMagicKeys } from "@vueuse/core";
 
 const { escape } = useMagicKeys();
 
-const emit = defineEmits(["onSuccess"]);
+const emit = defineEmits(["onSuccess", "showMessage"]);
 
-const admitionService = new AdmitionService();
 const payService = new PayService();
 
 const formSearch = ref(null);
@@ -145,7 +159,6 @@ const snakbar = ref({
   type: null,
 });
 
-const postulant = ref(null);
 const postulantLoading = ref(false);
 
 const conceptItemsDefault = [
@@ -202,6 +215,7 @@ watch(escape, (val) => {
 const restForm = () => {
   form.value.person = null;
   form.value.details = [];
+  isBlocked.value = false;
 
   search.value = null;
   inputSearch.value.focus();
@@ -210,6 +224,9 @@ const restForm = () => {
 const urlBase = import.meta.env.VITE_APP_BASE_URL;
 
 const urlPrint = ref(null);
+
+const isBlocked = ref(false);
+const isBlockedData = ref(null);
 
 const printPDF = (item) => {
   urlPrint.value = urlBase + "php/pdf_papeleta.php?id=" + item.payPrint.idpadre;
@@ -228,6 +245,8 @@ const printPDF = (item) => {
 
 const searchStudent = async () => {
   postulantLoading.value = true;
+  isBlocked.value = false;
+  isBlockedData.value = null;
 
   const { valid } = await formSearch.value.validate();
   if (!valid) {
@@ -236,12 +255,12 @@ const searchStudent = async () => {
     snakbar.value.text = "Ingrese un Codigo valido (6 digitos )";
     snakbar.value.type = "red";
     postulantLoading.value = false;
+
+    emit("showMessage", snakbar.value);
     return;
   }
 
   let res = await payService.getConditionStudent(search.value);
-
-  console.log(res);
 
   if (res.ok) {
     if (res.success) {
@@ -252,16 +271,20 @@ const searchStudent = async () => {
       form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
       form.value.details[0].price = res.data[0].amount;
     } else {
+      isBlocked.value = true;
+      isBlockedData.value = res.data;
       snakbar.value.show = true;
       snakbar.value.title = "Datos incorrectos";
       snakbar.value.text = res.message;
       snakbar.value.type = "red";
+      emit("showMessage", snakbar.value);
     }
   } else {
     snakbar.value.show = true;
     snakbar.value.title = "Error:";
     snakbar.value.text = "(a)  Error Desconocido";
     snakbar.value.type = "red";
+    emit("showMessage", snakbar.value);
   }
   postulantLoading.value = false;
 };
@@ -290,11 +313,13 @@ const savePay = async (item, index) => {
     snakbar.value.title = "Exito.";
     snakbar.value.text = res.message;
     snakbar.value.type = "green";
+    emit("showMessage", snakbar.value);
   } else {
     snakbar.value.show = true;
     snakbar.value.title = "Ocurrion un error";
     snakbar.value.text = res.message;
     snakbar.value.type = "red";
+    emit("showMessage", snakbar.value);
   }
 
   form.value.details[index].loading = false;

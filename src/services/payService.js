@@ -18,6 +18,15 @@ export default class PayService {
       if (data.length === 0) {
         let debts = await this.getDebtsStudent(code);
 
+        if (debts === null) {
+          return {
+            ok: false,
+            success: false,
+            message: "Codigo ingresado no encontrado (No presenta deudas)",
+            data: null,
+          };
+        }
+
         return {
           ok: true,
           success: true,

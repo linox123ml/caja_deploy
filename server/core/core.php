@@ -355,14 +355,11 @@ class CORE
     {
 
         include 'unap.php';
-
         $newPerson = null;
-
         $sqlSelect = "select num_mat from estudiante ";
         $sqlSelect .= "where num_mat = '$person->codigo_ingreso';";
         $result = $unap->query($sqlSelect);
         $row = $result->fetch_array();
-
 
         if ($row === null) {
             $codigo = $person->codigo_ingreso;
