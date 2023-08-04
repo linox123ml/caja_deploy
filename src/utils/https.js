@@ -12,4 +12,8 @@ const httpService4 = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL_API_SERVICE4,
 });
 
-export { server, httpAdmition, httpService4 };
+const httpService2 = axios.create({
+  baseURL: import.meta.env.VITE_APP_BASE_URL_API_SERVICE2,
+});
+
+export { server, httpAdmition, httpService4, httpService2 };

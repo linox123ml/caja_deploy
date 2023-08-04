@@ -1,12 +1,54 @@
-import { httpService4, server } from "../utils/https";
+import { httpService4, server, httpService2 } from "../utils/https";
 
 export default class PayService {
   getRegularStudent = async (code) => {
     try {
-      let res = await httpService4.post(`consulta_caja/${code}`);
+      let res = await httpService4.get(`consulta_caja/${code}`);
       return res.data;
     } catch (error) {
       return error.data;
+    }
+  };
+
+  getConditionStudent = async (code) => {
+    try {
+      let res = await httpService2.get(`CONDITIONS/?w=${code}`);
+      let data = res.data.data;
+
+      if (data.length === 0) {
+        let debts = await this.getDebtsStudent(code);
+
+        return {
+          ok: true,
+          success: true,
+          message: "Estudiante apto",
+          data: debts,
+        };
+      } else {
+        return {
+          ok: true,
+          success: false,
+          message: "Estudiante NO apto",
+          data: data,
+        };
+      }
+    } catch (error) {
+      return {
+        ok: false,
+        success: false,
+        message: "Ocurrió un error en el servicio, comunicarse con OTI.",
+        data: null,
+      };
+    }
+  };
+
+  getDebtsStudent = async (code) => {
+    let res = await httpService2.get(`DEBTS/?w=${code}`);
+    let data = res.data;
+    if (data.debts.length === 0) {
+      return null;
+    } else {
+      return data.debts;
     }
   };
 
