@@ -117,7 +117,7 @@
                 variant="flat"
                 color="success"
                 :loading="item.loading"
-                :disabled="item.price === 0"
+                :disabled="item.price === 0 || item.price === null || item.price === ''"
                 @click="savePay(item, index)"
 
               >
