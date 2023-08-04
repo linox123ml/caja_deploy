@@ -282,7 +282,7 @@ const searchStudent = async () => {
   } else {
     snakbar.value.show = true;
     snakbar.value.title = "Error:";
-    snakbar.value.text = "(a)  Error Desconocido";
+    snakbar.value.text = res.message;;
     snakbar.value.type = "red";
     emit("showMessage", snakbar.value);
   }
