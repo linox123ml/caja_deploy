@@ -506,6 +506,8 @@ const savePay = async () => {
     snakbar.value.title = "Error";
     snakbar.value.text = "Seleccion al menos un concepto de pago";
     snakbar.value.type = "red";
+  loadingPay.value = false;
+
     return;
   }
 
