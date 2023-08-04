@@ -4,17 +4,21 @@
       <v-tabs v-model="typeMat" color="white">
         <v-tab value="entrants"> Ingresantes </v-tab>
         <v-tab value="regular"> Regulares </v-tab>
-        <v-tab value="second" disabled> Segunda Carrera </v-tab>
+        <v-tab value="second"> Segunda Carrera </v-tab>
       </v-tabs>
     </v-toolbar>
   </v-card>
 
   <v-window v-model="typeMat">
     <v-window-item value="entrants">
-      <form-entranst-enrollment @showMessage="snakbar =$event"/>
+      <form-entranst-enrollment @showMessage="snakbar = $event" />
     </v-window-item>
     <v-window-item value="regular">
-      <FormRegularEnrollmnet @showMessage="snakbar =$event" />
+      <FormRegularEnrollmnet @showMessage="snakbar = $event" />
+    </v-window-item>
+
+    <v-window-item value="second">
+      <FormSecondRegularEnrollment @showMessage="snakbar = $event" />
     </v-window-item>
   </v-window>
 
@@ -39,6 +43,7 @@ import { ref } from "vue";
 import { VWindowItem } from "vuetify/lib/components/index.mjs";
 import FormEntranstEnrollment from "./FormEntranstEnrollment.vue";
 import FormRegularEnrollmnet from "./FormRegularEnrollment.vue";
+import FormSecondRegularEnrollment from "./FormSecondRegularEnrollment.vue";
 const typeMat = ref("entrants");
 const snakbar = ref({
   show: false,

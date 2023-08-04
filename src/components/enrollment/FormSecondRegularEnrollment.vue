@@ -53,7 +53,7 @@
       <v-card class="border">
         <v-card-title class="font-weight-bold bg-grey">
           {{
-            `${form.person.id} | ${form.person.lastname}  ${form.person.mlastname} , ${form.person.firstname}`
+            `${form.person.codigo_matricula} | ${form.person.paterno}  ${form.person.materno} , ${form.person.nombre}`
           }}
         </v-card-title>
         <v-divider></v-divider>
@@ -67,14 +67,28 @@
             {{ item.title }}
           </v-list-item-title>
           <v-list-item-subtitle class="text-h6">
+            <v-switch
+              v-if="item.options"
+              v-for="option in item.options"
+              :value="option.price"
+              density="compact"
+              color="primary"
+              hide-details
+              class="px-7 text-black font-weight-bold"
+              v-model="item.price"
+              :label="option.title"
+              :readonly="item.price === option.price"
+            ></v-switch>
+
             <v-text-field
-              class="text-black w-25"
+              label="Ingrese el monto"
+              class="text-black w-25 my-3"
               color="primary"
               prefix="S/. "
               v-if="item.isEdit"
               v-model="item.price"
-              variant="filled"
             />
+
             <v-chip
               v-else
               class="ma-2 text-blue-darken-5 py-2"
@@ -119,11 +133,12 @@ import { ref, watch } from "vue";
 import { AdmitionService, PayService } from "@/services/";
 import { useMagicKeys } from "@vueuse/core";
 
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
 const { escape } = useMagicKeys();
 
-const emit = defineEmits(["onSuccess"]);
+const emit = defineEmits(["onSuccess", "showMessage"]);
 
-const admitionService = new AdmitionService();
 const payService = new PayService();
 
 const formSearch = ref(null);
@@ -145,47 +160,45 @@ const snakbar = ref({
   type: null,
 });
 
-const postulant = ref(null);
 const postulantLoading = ref(false);
 
 const conceptItemsDefault = [
   {
     value: "0091",
-    title: "Por creditos desaprobados",
-    detail: "CREDITOS DESAPROBADOS",
+    title: "Por creditos",
+    detail: "CRÉDITOS POR SEGUNDA CARRERA",
     price: 0.0,
     hasPrint: false,
     payPrint: null,
-    // isEdit: true,
+    isEdit: true,
   },
 
   {
     value: "0091",
-    title: "Reserva de matricula",
-    detail: "RESERVA DE MATRICULA",
-    price: 33.0,
-    hasPrint: false,
-    payPrint: null,
+    codeBN: 26,
+    title: "Pago por concepto de matricula",
+    detail: "Matrículas SEGUNDA CARRERA",
+    price: 50.0,
+    options: [
+      {
+        title: "Colegio Estatal",
+        price: 50.0,
+      },
+      {
+        title: "Colegio Particular",
+        price: 100.0,
+      },
+    ],
   },
-
-  //   {
-  //     value: "0225",
-  //     title: "Amnistia para continuar estudios",
-  //     price: 200.0,
-  //     hasPrint: false,
-  //     payPrint: null,
-  //     isEdit: true,
-  //   },
 ];
 
 const conceptItems = ref(conceptItemsDefault);
 
 const defaultPerson = {
-  id: null,
-  firstname: null,
-  lastname: null,
-  mlastname: null,
-  academyData: null,
+  codigo_matricula: null,
+  nombre: null,
+  materno: null,
+  paterno: null,
 };
 
 const form = ref({
@@ -202,6 +215,7 @@ watch(escape, (val) => {
 const restForm = () => {
   form.value.person = null;
   form.value.details = [];
+  isBlocked.value = false;
 
   search.value = null;
   inputSearch.value.focus();
@@ -210,6 +224,9 @@ const restForm = () => {
 const urlBase = import.meta.env.VITE_APP_BASE_URL;
 
 const urlPrint = ref(null);
+
+const isBlocked = ref(false);
+const isBlockedData = ref(null);
 
 const printPDF = (item) => {
   urlPrint.value = urlBase + "php/pdf_papeleta.php?id=" + item.payPrint.idpadre;
@@ -226,8 +243,12 @@ const printPDF = (item) => {
   };
 };
 
+const isInvictus = ref(false);
+
 const searchStudent = async () => {
   postulantLoading.value = true;
+  isBlocked.value = false;
+  isBlockedData.value = null;
 
   const { valid } = await formSearch.value.validate();
   if (!valid) {
@@ -236,32 +257,35 @@ const searchStudent = async () => {
     snakbar.value.text = "Ingrese un Codigo valido (6 digitos )";
     snakbar.value.type = "red";
     postulantLoading.value = false;
+
+    emit("showMessage", snakbar.value);
     return;
   }
 
-  let res = await payService.getConditionStudent(search.value);
+  let res = await payService.getRegularStudent(search.value);
 
-  console.log(res);
+  console.log(res.data);
 
   if (res.ok) {
     if (res.success) {
       form.value.person = null;
       form.value.details = null;
       form.value.person = defaultPerson;
-      form.value.person = res.data[0];
+      form.value.person = res.data;
       form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
-      form.value.details[0].price = res.data[0].amount;
     } else {
       snakbar.value.show = true;
       snakbar.value.title = "Datos incorrectos";
       snakbar.value.text = res.message;
       snakbar.value.type = "red";
+      emit("showMessage", snakbar.value);
     }
   } else {
     snakbar.value.show = true;
     snakbar.value.title = "Error:";
-    snakbar.value.text = "(a)  Error Desconocido";
+    snakbar.value.text = res.message;
     snakbar.value.type = "red";
+    emit("showMessage", snakbar.value);
   }
   postulantLoading.value = false;
 };
@@ -270,10 +294,10 @@ const savePay = async (item, index) => {
   form.value.details[index].loading = true;
 
   let person = {
-    codigo_ingreso: form.value.person.id,
-    nombres: form.value.person.firstname,
-    primer_apellido: form.value.person.lastname,
-    segundo_apellido: form.value.person.mlastname,
+    codigo_ingreso: form.value.person.codigo_matricula,
+    nombres: form.value.person.nombre,
+    primer_apellido: form.value.person.paterno,
+    segundo_apellido: form.value.person.materno,
   };
 
   let data = {
@@ -290,11 +314,13 @@ const savePay = async (item, index) => {
     snakbar.value.title = "Exito.";
     snakbar.value.text = res.message;
     snakbar.value.type = "green";
+    emit("showMessage", snakbar.value);
   } else {
     snakbar.value.show = true;
     snakbar.value.title = "Ocurrion un error";
     snakbar.value.text = res.message;
     snakbar.value.type = "red";
+    emit("showMessage", snakbar.value);
   }
 
   form.value.details[index].loading = false;

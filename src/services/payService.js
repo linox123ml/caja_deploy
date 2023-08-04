@@ -4,9 +4,29 @@ export default class PayService {
   getRegularStudent = async (code) => {
     try {
       let res = await httpService4.get(`consulta_caja/${code}`);
-      return res.data;
+
+      if (res.data.status) {
+        return {
+          ok: true,
+          success: true,
+          message: res.data.message,
+          data: res.data.data,
+        };
+      } else {
+        return {
+          ok: true,
+          success: false,
+          message: res.data.message,
+          data: null,
+        };
+      }
     } catch (error) {
-      return error.data;
+      return {
+        ok: false,
+        success: false,
+        message: "Ocurrió un error en el servicio, comunicarse con OTI.",
+        data: null,
+      };
     }
   };
 

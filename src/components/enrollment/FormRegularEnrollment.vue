@@ -128,11 +128,32 @@
       </v-container>
     </v-card>
   </v-dialog>
+
+  <v-dialog v-model="isInvictus">
+    <v-card theme="dark" class="mx-auto" width="600px" rounded="lg">
+      <v-card-title>
+        Realice la operacion con el Sistema Anterior
+      </v-card-title>
+      <v-container>
+        <v-btn block>
+          <a
+            :href="baseUrl"
+            target="blank"
+            class="text-decoration-none text-white"
+          >
+            Arbir sistmea anterior
+          </a>
+        </v-btn>
+      </v-container>
+    </v-card>
+  </v-dialog>
 </template>
 <script setup>
 import { ref, watch } from "vue";
 import { AdmitionService, PayService } from "@/services/";
 import { useMagicKeys } from "@vueuse/core";
+
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 const { escape } = useMagicKeys();
 
@@ -243,6 +264,8 @@ const printPDF = (item) => {
   };
 };
 
+const isInvictus = ref(false);
+
 const searchStudent = async () => {
   postulantLoading.value = true;
   isBlocked.value = false;
@@ -282,8 +305,9 @@ const searchStudent = async () => {
   } else {
     snakbar.value.show = true;
     snakbar.value.title = "Error:";
-    snakbar.value.text = res.message;;
+    snakbar.value.text = res.message;
     snakbar.value.type = "red";
+    isInvictus.value= true;
     emit("showMessage", snakbar.value);
   }
   postulantLoading.value = false;
