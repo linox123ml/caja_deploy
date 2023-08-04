@@ -207,7 +207,7 @@
       <v-card-actions>
         <v-btn color="red" @click="dialogPostulant = false"> cancelar </v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="blue-darken-4" variant="tonal" @click="savePerson">
+        <v-btn color="blue-darken-4" variant="tonal" @click="savePerson" :loading="loadingPay">
           Guardar
         </v-btn>
       </v-card-actions>
@@ -492,8 +492,13 @@ const searchPostulant = async () => {
   postulantLoading.value = false;
 };
 
+
+const loadingPay =  ref(false);
+
 const savePay = async () => {
   payPrint.value = null;
+
+  loadingPay.value = true;
 
   let validDetails = await validateDetails();
   if (!validDetails) {
@@ -520,5 +525,8 @@ const savePay = async () => {
     snakbar.value.text = res.message;
     snakbar.value.type = "red";
   }
+
+  loadingPay.value = false;
+
 };
 </script>
