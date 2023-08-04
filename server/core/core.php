@@ -399,6 +399,8 @@ class CORE
         $result = $cn->query($query);
         $res = $result->fetch_assoc(MYSQLI_ASSOC);
 
+        $cn->close();
+
         if (count($res) > 0) {
             $this->response['success'] = false;
             $this->response['message'] = 'Otra persona NO encontrad(a)';
