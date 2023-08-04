@@ -428,9 +428,8 @@ const searchOtherPerson = async (term) => {
     form.value.person.nombres = person.nombre;
   } else {
     snakbar.value.show = true;
-    snakbar.value.title = res.message;
-    snakbar.value.text =
-      "Postulante no PRE-INSCRITO ... Buscando en OTRAS PERSONAS";
+    snakbar.value.text = res.message;
+    snakbar.value.title ="Sin resultados";
     snakbar.value.type = "warning";
   }
 };
