@@ -388,10 +388,8 @@ class CORE
         return $newPerson;
     }
 
-    function getConceptos($term)
+    function getConceptos($term, $cn)
     {
-        include 'cn.php';
-
         $query = `SELECT idtarifa, codigo, destarifa
                  FROM teso_tarifascaja
                  WHERE destarifa LIKE '%$term%';`;
