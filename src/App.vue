@@ -39,22 +39,28 @@
     </template>
     <template v-else>
       <v-main>
-        <v-toolbar>
-          <v-tabs v-model="tab">
+        <v-toolbar color="blue-darken-3">
+          <v-tabs v-model="tab" color="orange">
             <v-tab value="inscription"> Inscripciones </v-tab>
             <v-tab value="enrollment"> Matriculas </v-tab>
+            <v-tab disabled value="others"> Otros </v-tab>
           </v-tabs>
         </v-toolbar>
-        <v-container>
-          <v-window v-model="tab">
-            <v-window-item value="inscription">
+        <v-window v-model="tab">
+          <v-window-item value="inscription">
+            <v-container>
               <WindowInscriptions />
-            </v-window-item>
-            <v-window-item value="enrollment">
+            </v-container>
+          </v-window-item>
+          <v-window-item value="enrollment">
+            <v-container>
               <WindowEnrollment />
-            </v-window-item>
-          </v-window>
-        </v-container>
+            </v-container>
+          </v-window-item>
+          <v-window-item value="others">
+            <WindowOther />
+          </v-window-item>
+        </v-window>
       </v-main>
     </template>
 
@@ -70,6 +76,7 @@ import { ref } from "vue";
 import { AuthService } from "./services/index";
 import WindowInscriptions from "./components/inscriptions/WindowInscriptions.vue";
 import WindowEnrollment from "./components/enrollment/WindowEnrollment.vue";
+import WindowOther from "./components/others/WindowOther.vue";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 

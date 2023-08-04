@@ -370,8 +370,8 @@ const printPDF = () => {
   urlPrint.value =
     urlBase + "php/pdf_papeleta.php?id=" + payPrint.value.idpadre;
 
-  var pdfUrl = urlPrint.value; // Replace this with your PDF URL
-  var iframe = document.getElementById("pdfFrame");
+  let pdfUrl = urlPrint.value; // Replace this with your PDF URL
+  let iframe = document.getElementById("pdfFrame");
 
   iframe.src = pdfUrl;
 
