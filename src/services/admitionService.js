@@ -32,7 +32,6 @@ class AdmitionService {
         `get-ingresante-pago/${document}/2023/2`
       );
 
-      console.log(res.data);
       return {
         ok: true,
         status: res.data.status,

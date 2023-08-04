@@ -117,7 +117,7 @@
                 variant="flat"
                 color="success"
                 :loading="item.loading"
-                :disabled="item.price === 0 || item.price === null || item.price === ''"
+                :disabled="item.price === 0 || item.price === null || item.price === ''  "
                 @click="savePay(item, index)"
 
               >
@@ -265,8 +265,6 @@ const searchStudent = async () => {
   }
 
   let res = await payService.getRegularStudent(search.value);
-
-  console.log(res.data);
 
   if (res.ok) {
     if (res.success) {
