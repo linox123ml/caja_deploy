@@ -158,6 +158,14 @@ const conceptItemsDefault = [
     // isEdit: true,
   },
 
+  {
+    value: "0091",
+    title: "Reserva de matricula",
+    price: 33.0,
+    hasPrint: false,
+    payPrint: null,
+  },
+
   //   {
   //     value: "0225",
   //     title: "Amnistia para continuar estudios",
@@ -166,13 +174,6 @@ const conceptItemsDefault = [
   //     payPrint: null,
   //     isEdit: true,
   //   },
-  {
-    value: "0091",
-    title: "Reserva de matricula",
-    price: 33.0,
-    hasPrint: false,
-    payPrint: null,
-  },
 ];
 
 const conceptItems = ref(conceptItemsDefault);
@@ -265,10 +266,19 @@ const searchStudent = async () => {
 
 const savePay = async (item, index) => {
   form.value.details[index].loading = true;
+
+  let person = {
+    codigo_ingreso: form.value.person.id,
+    nombres: form.value.person.firstname,
+    primer_apellido: form.value.person.lastname,
+    segundo_apellido: form.value.person.mlastname,
+  };
+
   let data = {
     details: [item],
-    person: form.value.person,
+    person: person,
   };
+
   let res = await payService.savePayMat(data);
 
   if (res.success) {
