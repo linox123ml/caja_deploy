@@ -7,4 +7,5 @@ return [
     'DB_USER' => '',
     'DB_PASSWORD' => '',
     'MODE' => 'dev',
+
 ];
