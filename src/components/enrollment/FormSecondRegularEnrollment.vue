@@ -117,7 +117,9 @@
                 variant="flat"
                 color="success"
                 :loading="item.loading"
+                :disabled="item.price >= 15.00"
                 @click="savePay(item, index)"
+
               >
                 Pagar
               </v-btn>
