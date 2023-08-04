@@ -6,7 +6,7 @@
   >
     <v-card-item>
       <v-btn block variant="tonal" color="blue" @click="dialogPostulant = true">
-        Sin Pre-inscripcion
+        NUEVO
       </v-btn>
     </v-card-item>
     <v-container>
@@ -430,7 +430,7 @@ const searchOtherPerson = async (term) => {
     snakbar.value.show = true;
     snakbar.value.text = res.message;
     snakbar.value.title ="Sin resultados";
-    snakbar.value.type = "warning";
+    snakbar.value.type = "red";
   }
 };
 
