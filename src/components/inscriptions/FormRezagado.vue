@@ -274,8 +274,8 @@ const restForm = () => {
   formPerson.value.apellidos = null;
   formPerson.value.nombres = null;
   formPerson.value.pagos = [];
-  payPrint.value = null;
-  hasPrint.value = false;
+//   payPrint.value = null;
+//   hasPrint.value = false;
   search.value = null;
   inputSearch.value.focus();
 };
