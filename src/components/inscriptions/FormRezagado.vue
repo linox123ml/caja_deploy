@@ -358,6 +358,8 @@ const savePerson = async () => {
   dialogPostulant.value = false;
 };
 
+const personFormRef = ref(null);
+
 const searchOtherPerson = async (term) => {
   let res = await payService.getOtherPerson(term);
   if (res.success) {
