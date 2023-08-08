@@ -167,7 +167,7 @@ class CORE
         $cantidad = 1; //*Default: 1
         $precio = $detail->price;
         // $detalle = $detail->title;
-        $detalle = '';
+        $detalle = $detail->detail;
 
         $sql = "insert into teso_papeletatarifas (idpapeleta,idtarifa,cantidad,precio,detalle) ";
         $sql .= "values ('$idpadre','$idtarifa','$cantidad','$precio','$detalle') ";
