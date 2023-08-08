@@ -4,6 +4,13 @@
     class="mx-auto mb-5 border"
     style="width: 500px"
   >
+    <v-toolbar>
+      <v-tabs v-model="typeMat" color="blue">
+        <v-tab value="re"> REZAGADOS </v-tab>
+        <v-tab value="aa"> ADMISION </v-tab>
+      </v-tabs>
+    </v-toolbar>
+
     <v-card-item>
       <v-btn block variant="tonal" color="blue" @click="dialogPostulant = true">
         NUEVO
@@ -53,113 +60,185 @@
     </v-container>
   </v-card>
 
-  <v-row v-if="form.person">
-    <v-col cols="12" md="6">
-      <v-card class="border">
-        <v-card-title>Conceptos de pago </v-card-title>
-        <v-divider></v-divider>
+  <v-window v-model="typeMat">
+    <v-window-item value="aa">
+      <v-row v-if="form.person">
+        <v-col cols="12" md="6">
+          <v-card class="border">
+            <v-card-title>Conceptos de pago </v-card-title>
+            <v-divider></v-divider>
 
-        <v-list-item
-          density="compact"
-          v-for="(item, index) in conceptItems"
-          :key="index"
-          :title="item.title"
-        >
-          <v-switch
-            v-if="item.options"
-            v-for="option in item.options"
-            :value="option.price"
-            density="compact"
-            color="black"
-            hide-details
-            class="px-7 text-black font-weight-bold"
-            v-model="item.price"
-            :label="option.title"
-            :readonly="item.price === option.price"
-          ></v-switch>
-          <template v-slot:append>
-            <v-switch
-              :value="item"
-              v-model="form.details"
-              inset
-              @update:modelValue="validateDetails()"
-              hide-details
-              color="blue"
-            ></v-switch>
-          </template>
-        </v-list-item>
-      </v-card>
-    </v-col>
-    <v-col cols="12" md="6">
-      <v-card class="border">
-        <v-card-title class="font-weight-bold">
-          <small>
-            {{ `${form.person.nro_doc} | ${form.person.nombres}` }}
-          </small>
-        </v-card-title>
-        <v-divider></v-divider>
-
-        <v-card-item>
-          <v-list-item v-for="(item, index) in form.details" :key="index">
-            <v-list-item-title>
-              {{ item.title }}
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              {{ "S/. " + item.price }}
-            </v-list-item-subtitle>
-            <template v-slot:append>
-              <v-chip class="ma-2" size="x-large" label>
-                <strong> {{ "S/. " + item.price }}</strong>
-              </v-chip>
-            </template>
-          </v-list-item>
-
-          <v-divider></v-divider>
-          <v-list-item>
-            <v-list-item-subtitle class="text-end me-4">
-              <strong>Total a pagar</strong>
-            </v-list-item-subtitle>
-
-            <v-list-item-title class="text-end me-4 text-red">
-              <strong>{{ detalleError }}</strong>
-            </v-list-item-title>
-
-            <template v-slot:append>
-              <v-chip
-                class="ma-2"
-                size="x-large"
-                label
-                :class="detalleError !== null ? 'text-red' : ''"
-              >
-                <strong :class="detalleError !== null ? 'text-red' : ''">
-                  {{ "S/. " + total }}</strong
-                >
-              </v-chip>
-            </template>
-          </v-list-item>
-        </v-card-item>
-        <v-divider></v-divider>
-        <v-card-actions class="">
-          <template v-if="hasPrint">
-            <v-btn block variant="flat" color="orange" @click="printPDF">
-              imprimir <small class="ms-3">[ ESPACIO + I]</small>
-            </v-btn>
-          </template>
-          <template v-else>
-            <v-btn
-              block
-              variant="flat"
-              color="success"
-              @click="savePay"
-              :loading="loadingPay"
+            <v-list-item
+              density="compact"
+              v-for="(item, index) in conceptItems"
+              :key="index"
+              :title="item.title"
             >
-              Pagar <small class="ms-3">[ ESPACIO + P ]</small>
-            </v-btn>
-          </template>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+              <v-switch
+                v-if="item.options"
+                v-for="option in item.options"
+                :value="option.price"
+                density="compact"
+                color="black"
+                hide-details
+                class="px-7 text-black font-weight-bold"
+                v-model="item.price"
+                :label="option.title"
+                :readonly="item.price === option.price"
+              ></v-switch>
+              <template v-slot:append>
+                <v-switch
+                  :value="item"
+                  v-model="form.details"
+                  inset
+                  @update:modelValue="validateDetails()"
+                  hide-details
+                  color="blue"
+                ></v-switch>
+              </template>
+            </v-list-item>
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-card class="border">
+            <v-card-title class="font-weight-bold">
+              <small>
+                {{ `${form.person.nro_doc} | ${form.person.nombres}` }}
+              </small>
+            </v-card-title>
+            <v-divider></v-divider>
+
+            <v-card-item>
+              <v-list-item v-for="(item, index) in form.details" :key="index">
+                <v-list-item-title>
+                  {{ item.title }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ "S/. " + item.price }}
+                </v-list-item-subtitle>
+                <template v-slot:append>
+                  <v-chip class="ma-2" size="x-large" label>
+                    <strong> {{ "S/. " + item.price }}</strong>
+                  </v-chip>
+                </template>
+              </v-list-item>
+
+              <v-divider></v-divider>
+              <v-list-item>
+                <v-list-item-subtitle class="text-end me-4">
+                  <strong>Total a pagar</strong>
+                </v-list-item-subtitle>
+
+                <v-list-item-title class="text-end me-4 text-red">
+                  <strong>{{ detalleError }}</strong>
+                </v-list-item-title>
+
+                <template v-slot:append>
+                  <v-chip
+                    class="ma-2"
+                    size="x-large"
+                    label
+                    :class="detalleError !== null ? 'text-red' : ''"
+                  >
+                    <strong :class="detalleError !== null ? 'text-red' : ''">
+                      {{ "S/. " + total }}</strong
+                    >
+                  </v-chip>
+                </template>
+              </v-list-item>
+            </v-card-item>
+            <v-divider></v-divider>
+            <v-card-actions class="">
+              <template v-if="hasPrint">
+                <v-btn block variant="flat" color="orange" @click="printPDF">
+                  imprimir <small class="ms-3">[ ESPACIO + I]</small>
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn
+                  block
+                  variant="flat"
+                  color="success"
+                  @click="savePay"
+                  :loading="loadingPay"
+                >
+                  Pagar <small class="ms-3">[ ESPACIO + P ]</small>
+                </v-btn>
+              </template>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-window-item>
+    <v-window-item value="re">
+      <v-row v-if="form.person">
+        <v-col cols="12" md="8" class="mx-auto">
+          <v-card class="border">
+            <v-card-title class="font-weight-bold bg-grey">
+              {{
+                `${form.person.nro_documento} | ${form.person.primer_apellido}  ${form.person.segundo_apellido} , ${form.person.nombres}`
+              }}
+            </v-card-title>
+            <v-divider></v-divider>
+
+            <v-list-item
+              v-for="(item, index) in form.details"
+              :key="index"
+              class="border"
+            >
+              <v-list-item-title class="text-h6 font-weight-bold">
+                {{ item.title }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="text-h6">
+                <v-text-field
+                  class="text-black w-25"
+                  color="primary"
+                  prefix="S/. "
+                  v-if="item.isEdit"
+                  v-model="item.price"
+                  variant="filled"
+                />
+                <v-chip
+                  v-else
+                  class="ma-2 text-blue-darken-5 py-2"
+                  size="x-large"
+                  label
+                >
+                  <strong>
+                    {{ "S/. " + Number.parseFloat(item.price).toFixed(2) }}
+                  </strong>
+                </v-chip>
+              </v-list-item-subtitle>
+              <template v-slot:append>
+                <template v-if="item.hasPrint">
+                  <v-btn
+                    block
+                    variant="flat"
+                    color="orange"
+                    @click="printPDF(item, index)"
+                  >
+                    imprimir
+                  </v-btn>
+                </template>
+                <template v-else>
+                  <v-btn
+                    block
+                    variant="flat"
+                    color="success"
+                    :loading="item.loading"
+                    @click="savePay(item, index)"
+                  >
+                    Pagar
+                  </v-btn>
+                </template>
+              </template>
+            </v-list-item>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-window-item>
+  </v-window>
+
   <v-snackbar multiline v-model="snakbar.show" :color="snakbar.type">
     <h4>
       <strong>
@@ -234,6 +313,7 @@ const payService = new PayService();
 
 const emit = defineEmits(["onSuccess"]);
 
+const typeMat = ref("re");
 const formPerson = ref({
   nro_doc: null,
   apellidos: null,
