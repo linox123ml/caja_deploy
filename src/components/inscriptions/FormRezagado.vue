@@ -376,6 +376,13 @@ const searchOtherPerson = async (term) => {
   }
 };
 
+const formPerson = ref({
+  nro_doc: null,
+  apellidos: null,
+  nombres: null,
+  pagos: [],
+});
+
 const savePay = async (item, index) => {
   form.value.details[index].loading = true;
   let data = {
