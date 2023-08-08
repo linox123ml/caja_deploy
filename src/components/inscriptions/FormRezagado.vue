@@ -118,6 +118,18 @@
             {{ item.title }}
           </v-list-item-title>
           <v-list-item-subtitle class="text-h6">
+            <v-switch
+              v-if="item.options"
+              v-for="option in item.options"
+              :value="option.price"
+              density="compact"
+              color="primary"
+              hide-details
+              class="px-7 text-black font-weight-bold"
+              v-model="item.price"
+              :label="option.title"
+              :readonly="item.price === option.price"
+            ></v-switch>
             <v-text-field
               class="text-black w-25"
               color="primary"
