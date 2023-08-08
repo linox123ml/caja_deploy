@@ -197,6 +197,7 @@ const snakbar = ref({
 
 const postulant = ref(null);
 const postulantLoading = ref(false);
+const dialogPostulant = ref(false);
 
 const conceptItemsDefault = [
   {
@@ -253,10 +254,18 @@ watch(escape, (val) => {
   }
 });
 
+
+
 const restForm = () => {
+  form.value.code = null;
   form.value.person = null;
   form.value.details = [];
-
+  formPerson.value.nro_doc = null;
+  formPerson.value.apellidos = null;
+  formPerson.value.nombres = null;
+  formPerson.value.pagos = [];
+  payPrint.value = null;
+  hasPrint.value = false;
   search.value = null;
   inputSearch.value.focus();
 };
@@ -331,6 +340,42 @@ const searchPostulant = async () => {
 };
 
 
+
+const savePerson = async () => {
+  const { valid } = await personFormRef.value.validate();
+
+  if (!valid) {
+    snakbar.value.show = true;
+    snakbar.value.title = "Error";
+    snakbar.value.text = "Todos los campos son obligatorios";
+    snakbar.value.type = "red";
+
+    return;
+  }
+  form.value.person = { nro_doc: "", nombres: "" };
+  form.value.person.nro_doc = formPerson.value.nro_doc;
+  form.value.person.nombres =
+    formPerson.value.apellidos + " " + formPerson.value.nombres;
+  form.value.details = [];
+  dialogPostulant.value = false;
+};
+
+
+const searchOtherPerson = async (term) => {
+  let res = await payService.getOtherPerson(term);
+  if (res.success) {
+    form.value.person = { nro_doc: "", nombres: "" };
+    form.value.details = [];
+    let person = res.data;
+    form.value.person.nro_doc = person.codigo;
+    form.value.person.nombres = person.nombre;
+  } else {
+    snakbar.value.show = true;
+    snakbar.value.text = res.message;
+    snakbar.value.title = "Sin resultados";
+    snakbar.value.type = "red";
+  }
+};
 
 const savePay = async (item, index) => {
   form.value.details[index].loading = true;
