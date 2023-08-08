@@ -357,6 +357,8 @@ const savePerson = async () => {
   form.value.person.nombres =
     formPerson.value.apellidos + " " + formPerson.value.nombres;
   form.value.details = [];
+
+  form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
   dialogPostulant.value = false;
 };
 
