@@ -254,8 +254,6 @@ watch(escape, (val) => {
   }
 });
 
-
-
 const restForm = () => {
   form.value.code = null;
   form.value.person = null;
@@ -339,8 +337,6 @@ const searchPostulant = async () => {
   postulantLoading.value = false;
 };
 
-
-
 const savePerson = async () => {
   const { valid } = await personFormRef.value.validate();
 
@@ -362,7 +358,6 @@ const savePerson = async () => {
   dialogPostulant.value = false;
 };
 
-
 const searchOtherPerson = async (term) => {
   let res = await payService.getOtherPerson(term);
   if (res.success) {
@@ -371,6 +366,8 @@ const searchOtherPerson = async (term) => {
     let person = res.data;
     form.value.person.nro_doc = person.codigo;
     form.value.person.nombres = person.nombre;
+
+    form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
   } else {
     snakbar.value.show = true;
     snakbar.value.text = res.message;
