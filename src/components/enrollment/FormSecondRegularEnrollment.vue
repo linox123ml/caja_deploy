@@ -180,6 +180,8 @@ const conceptItemsDefault = [
     codeBN: 26,
     title: "Matriculas SEGUNDA CARRERA",
     detail: "Matriculas SEGUNDA CARRERA",
+    hasPrint: false,
+    payPrint: null,
     price: 50.0,
     options: [
       {
