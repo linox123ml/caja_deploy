@@ -6,7 +6,7 @@
       </div>
       <v-toolbar-title>CAJA - UNA-PUNO</v-toolbar-title>
 
-      <v-chip label> Examen General 2023</v-chip>
+      <v-chip label> Examen CEPRE 2024</v-chip>
       <v-spacer></v-spacer>
       <v-btn>
         <a
@@ -42,7 +42,7 @@
         <v-toolbar color="blue-darken-3">
           <v-tabs v-model="tab" color="orange">
             <v-tab value="inscription"> Inscripciones </v-tab>
-            <v-tab value="enrollment"> Matriculas </v-tab>
+            <v-tab value="enrollment" disabled> Matriculas </v-tab>
             <v-tab value="others" disabled> Otros </v-tab>
           </v-tabs>
         </v-toolbar>

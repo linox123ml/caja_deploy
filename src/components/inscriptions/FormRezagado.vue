@@ -212,25 +212,32 @@ const postulantLoading = ref(false);
 const dialogPostulant = ref(false);
 
 const conceptItemsDefault = [
+  // {
+  //   value: "0075",
+  //   codeBN: 26,
+  //   title: "Derecho de Admisión",
+  //   price: 200.0,
+  //   options: [
+  //     {
+  //       title: "Colegio Estatal",
+  //       price: 200.0,
+  //     },
+  //     {
+  //       title: "Colegio Particular",
+  //       price: 350.0,
+  //     },
+  //     {
+  //       title: "Colegio Extranjero",
+  //       price: 450.0,
+  //     },
+  //   ],
+  // },
   {
     value: "0075",
     codeBN: 26,
-    title: "Derecho de Admisión",
-    price: 200.0,
-    options: [
-      {
-        title: "Colegio Estatal",
-        price: 200.0,
-      },
-      {
-        title: "Colegio Particular",
-        price: 350.0,
-      },
-      {
-        title: "Colegio Extranjero",
-        price: 450.0,
-      },
-    ],
+    title: "Costo por carpeta de postulante(CEPRE)",
+    detail: "REZAGADOS",
+    price: 20.0,
   },
   {
     value: "0075",
