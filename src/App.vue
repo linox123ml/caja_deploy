@@ -42,7 +42,7 @@
         <v-toolbar color="blue-darken-3">
           <v-tabs v-model="tab" color="orange">
             <v-tab value="inscription"> Inscripciones </v-tab>
-            <v-tab value="enrollment" disabled> Matriculas </v-tab>
+            <v-tab value="enrollment" > Matriculas </v-tab>
             <v-tab value="others" disabled> Otros </v-tab>
           </v-tabs>
         </v-toolbar>

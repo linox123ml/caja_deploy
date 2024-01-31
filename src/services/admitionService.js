@@ -29,7 +29,7 @@ class AdmitionService {
         "Bearer " + import.meta.env.VITE_APP_API_ADMITION_TOKEN;
 
       let res = await httpAdmition.get(
-        `get-ingresante-pago/${document}/2023/2`
+        `get-ingresante-pago/${document}/2024/1`
       );
 
       return {
