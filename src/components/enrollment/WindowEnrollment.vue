@@ -2,7 +2,7 @@
   <v-card class="mx-auto border" style="max-width: 600px">
     <v-toolbar class="bg-blue-darken-4">
       <v-tabs v-model="typeMat" color="white">
-        <v-tab value="entrants"> Ingresantes </v-tab>
+        <v-tab value="entrants"> Ingresantes CEPRE - 2024-I </v-tab>
         <v-tab value="regular"> Regulares </v-tab>
         <v-tab value="second"> Segunda Carrera </v-tab>
       </v-tabs>
