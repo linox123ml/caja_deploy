@@ -2,7 +2,7 @@
   <v-card
     :loading="postulantLoading"
     class="mx-auto mb-5 border"
-    style="width: 500px"
+    style="width: 600px"
   >
     <v-card-item>
       <v-btn block variant="tonal" color="blue" @click="dialogPostulant = true">
