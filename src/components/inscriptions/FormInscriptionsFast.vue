@@ -428,7 +428,7 @@ const savePerson = async () => {
   form.value.person.nro_doc = formPerson.value.nro_doc;
   form.value.person.nombres =
     formPerson.value.apellidos + " " + formPerson.value.nombres;
-  form.value.details = [];
+  form.value.details = conceptItems.value;
   dialogPostulant.value = false;
 };
 
