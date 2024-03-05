@@ -273,6 +273,7 @@ const conceptItems = ref([
     codeBN: 26,
     title: "Costo por carpeta de postulante",
     price: 20.0,
+    detail: "Costo por carpeta de postulante",
     options: null,
   },
 
