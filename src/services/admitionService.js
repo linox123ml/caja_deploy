@@ -5,7 +5,7 @@ class AdmitionService {
     try {
       httpAdmition.defaults.headers["Authorization"] =
         "Bearer " + import.meta.env.VITE_APP_API_ADMITION_TOKEN;
-      let res = await httpAdmition.get(`get-postulante-pago/${document}/5`);
+      let res = await httpAdmition.get(`get-postulante-pago/${document}/8`);
       // let res = await httpAdmition.get(`get-ingresante-pago/${document}/${anio}/${ciclo}`);
       return {
         ok: true,
