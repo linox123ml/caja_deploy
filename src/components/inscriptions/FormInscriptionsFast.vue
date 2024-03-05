@@ -285,6 +285,7 @@ const conceptItems = ref([
     price: 80.0,
     options: null,
   },
+
   {
     value: "0219",
     codeBN: 39,
@@ -299,6 +300,26 @@ const conceptItems = ref([
     price: 30.0,
     options: null,
   },
+
+  // {
+  //   value: "0075",
+  //   codeBN: 26,
+  //   title: "Derecho de Admisión -  SEGUNDA CARRERA",
+  //   price: 200.0,
+  //   detail: "SEGUNDA CARRERA",
+  //   options: [
+  //     {
+  //       title: "Colegio Estatal",
+  //       price: 400.0,
+  //        isEdit: true,
+  //     },
+  //     {
+  //       title: "Colegio Particular",
+  //       price: 700.0,
+  //        isEdit: true,
+  //     },
+  //   ],
+  // },
 
   // {
   //   value: "0075",
