@@ -111,7 +111,7 @@
                 block
                 variant="flat"
                 color="orange"
-                @click="printPDF(item, index)"
+                @click="printPDF2(item, index)"
               >
                 imprimir
               </v-btn>
@@ -346,6 +346,21 @@ watchEffect(async () => {
     printPDF();
   }
 });
+
+const printPDF2 = (item) => {
+  urlPrint.value = urlBase + "php/pdf_papeleta.php?id=" + item.payPrint.idpadre;
+  let pdfUrl = urlPrint.value;
+  let iframe = document.getElementById("pdfFrame");
+
+  iframe.src = pdfUrl;
+  iframe.onload = function () {
+    if (iframe.contentWindow) {
+      iframe.contentWindow.print();
+    } else {
+      iframe.contentDocument.print();
+    }
+  };
+};
 
 const restForm = () => {
   form.value.code = null;
