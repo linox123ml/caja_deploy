@@ -54,112 +54,88 @@
   </v-card>
 
   <v-row v-if="form.person">
-    <v-col cols="12" md="6">
+    <v-col cols="12" md="8" class="mx-auto">
       <v-card class="border">
-        <v-card-title>Conceptos de pago </v-card-title>
-        <v-divider></v-divider>
-
-        <v-list-item
-          density="compact"
-          v-for="(item, index) in conceptItems"
-          :key="index"
-          :title="item.title"
-        >
-          <v-switch
-            v-if="item.options"
-            v-for="option in item.options"
-            :value="option.price"
-            density="compact"
-            color="black"
-            hide-details
-            class="px-7 text-black font-weight-bold"
-            v-model="item.price"
-            :label="option.title"
-            :readonly="item.price === option.price"
-          ></v-switch>
-          <template v-slot:append>
-            <v-switch
-              :value="item"
-              v-model="form.details"
-              inset
-              @update:modelValue="validateDetails()"
-              hide-details
-              color="blue"
-            ></v-switch>
-          </template>
-        </v-list-item>
-      </v-card>
-    </v-col>
-    <v-col cols="12" md="6">
-      <v-card class="border">
-        <v-card-title class="font-weight-bold">
+        <v-card-title class="font-weight-bold bg-grey">
           <small>
             {{ `${form.person.nro_doc} | ${form.person.nombres}` }}
           </small>
         </v-card-title>
         <v-divider></v-divider>
 
-        <v-card-item>
-          <v-list-item v-for="(item, index) in form.details" :key="index">
-            <v-list-item-title>
-              {{ item.title }}
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              {{ "S/. " + item.price }}
-            </v-list-item-subtitle>
-            <template v-slot:append>
-              <v-chip class="ma-2" size="x-large" label>
-                <strong> {{ "S/. " + item.price }}</strong>
-              </v-chip>
-            </template>
-          </v-list-item>
+        <v-list-item
+          v-for="(item, index) in form.details"
+          :key="index"
+          class="border"
+        >
+          <v-list-item-title class="text-h6 font-weight-bold">
+            {{ item.title }}
+          </v-list-item-title>
+          <v-list-item-subtitle class="text-h6">
+            <v-switch
+              v-if="item.options"
+              v-for="option in item.options"
+              :value="option.price"
+              density="compact"
+              color="primary"
+              hide-details
+              class="px-7 text-black font-weight-bold"
+              v-model="item.price"
+              :label="option.title"
+              :readonly="item.price === option.price"
+            ></v-switch>
 
-          <v-divider></v-divider>
-          <v-list-item>
-            <v-list-item-subtitle class="text-end me-4">
-              <strong>Total a pagar</strong>
-            </v-list-item-subtitle>
+            <v-text-field
+              label="Ingrese el monto"
+              class="text-black w-25 my-3"
+              color="primary"
+              prefix="S/. "
+              v-if="item.isEdit"
+              v-model="item.price"
+            />
 
-            <v-list-item-title class="text-end me-4 text-red">
-              <strong>{{ detalleError }}</strong>
-            </v-list-item-title>
-
-            <template v-slot:append>
-              <v-chip
-                class="ma-2"
-                size="x-large"
-                label
-                :class="detalleError !== null ? 'text-red' : ''"
-              >
-                <strong :class="detalleError !== null ? 'text-red' : ''">
-                  {{ "S/. " + total }}</strong
-                >
-              </v-chip>
-            </template>
-          </v-list-item>
-        </v-card-item>
-        <v-divider></v-divider>
-        <v-card-actions class="">
-          <template v-if="hasPrint">
-            <v-btn block variant="flat" color="orange" @click="printPDF">
-              imprimir <small class="ms-3">[ ESPACIO + I]</small>
-            </v-btn>
-          </template>
-          <template v-else>
-            <v-btn
-              block
-              variant="flat"
-              color="success"
-              @click="savePay"
-              :loading="loadingPay"
+            <v-chip
+              v-else
+              class="ma-2 text-blue-darken-5 py-2"
+              size="x-large"
+              label
             >
-              Pagar <small class="ms-3">[ ESPACIO + P ]</small>
-            </v-btn>
+              <strong>
+                {{ "S/. " + Number.parseFloat(item.price).toFixed(2) }}
+              </strong>
+            </v-chip>
+          </v-list-item-subtitle>
+          <template v-slot:append>
+            <template v-if="item.hasPrint">
+              <v-btn
+                block
+                variant="flat"
+                color="orange"
+                @click="printPDF(item, index)"
+              >
+                imprimir
+              </v-btn>
+            </template>
+            <template v-else>
+              <v-btn
+                block
+                variant="flat"
+                color="success"
+                :loading="item.loading"
+                :disabled="
+                  item.price === 0 || item.price === null || item.price === ''
+                "
+                @click="savePayUnit(item, index)"
+              >
+                Pagar
+              </v-btn>
+            </template>
           </template>
-        </v-card-actions>
+        </v-list-item>
       </v-card>
     </v-col>
   </v-row>
+
   <v-snackbar multiline v-model="snakbar.show" :color="snakbar.type">
     <h4>
       <strong>
@@ -297,6 +273,7 @@ const conceptItems = ref([
     codeBN: 26,
     title: "Costo por carpeta de postulante",
     price: 20.0,
+    options: null,
   },
 
   {
@@ -305,18 +282,21 @@ const conceptItems = ref([
     title: "Derecho de Admisión - REZAGADOS",
     detail: "REZAGADOS",
     price: 80.0,
+    options: null,
   },
   {
     value: "0219",
     codeBN: 39,
     title: "Servicio Medico",
     price: 30.0,
+    options: null,
   },
   {
     value: "0269",
     codeBN: 25,
     title: "Duplicado de constancia de inscripcion modificada",
     price: 30.0,
+    options: null,
   },
 
   // {
@@ -479,14 +459,17 @@ const searchPostulant = async () => {
         " " +
         res.data.nombres;
 
-      res.data.pagos.forEach((item) => {
-        let pago = conceptItems.value.find(
-          (element) => item.cod === element.codeBN
-        );
-        if (pago) {
-          form.value.details.push(pago);
-        }
-      });
+      // res.data.pagos.forEach((item) => {
+      //   let pago = conceptItems.value;
+
+      //   // let pago = conceptItems.value.find(
+      //   //   (element) => item.cod === element.codeBN
+      //   // );
+      //   if (pago) {
+      //     form.value.details.push(pago);
+      //   }
+      // });
+      form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
       postulantLoading.value = false;
       return;
     } else {
@@ -527,9 +510,8 @@ const savePay = async () => {
   }
 
   console.log(form.value);
-  // loadingPay.value = false;
-  // return;
-
+  loadingPay.value = false;
+  return;
   let res = await payService.savePay(form.value);
 
   if (res.success) {
@@ -548,5 +530,46 @@ const savePay = async () => {
   }
 
   loadingPay.value = false;
+};
+
+const savePayUnit = async (item, index) => {
+  form.value.details[index].loading = true;
+
+  let person = {
+    codigo_ingreso: form.value.person.codigo_matricula,
+    nombres: form.value.person.nombre,
+    primer_apellido: form.value.person.paterno,
+    segundo_apellido: form.value.person.materno,
+  };
+
+  let data = {
+    code: "",
+    details: [{ ...item }],
+    person: { ...form.value.person },
+  };
+
+  console.log("OP2", data);
+  // form.value.details[index].loading = false;
+  // return;
+
+  let res = await payService.savePay(data);
+
+  if (res.success) {
+    form.value.details[index].hasPrint = true;
+    form.value.details[index].payPrint = res.data;
+    snakbar.value.show = true;
+    snakbar.value.title = "Exito.";
+    snakbar.value.text = res.message;
+    snakbar.value.type = "green";
+    emit("showMessage", snakbar.value);
+  } else {
+    snakbar.value.show = true;
+    snakbar.value.title = "Ocurrion un error";
+    snakbar.value.text = res.message;
+    snakbar.value.type = "red";
+    emit("showMessage", snakbar.value);
+  }
+
+  form.value.details[index].loading = false;
 };
 </script>

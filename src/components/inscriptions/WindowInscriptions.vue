@@ -9,8 +9,8 @@ import FormInscriptions from "./FormInscriptions.vue";
   <v-card class="mx-auto border" style="max-width: 600px">
     <v-toolbar class="bg-blue-darken-4">
       <v-tabs v-model="typeMat" color="white">
-        <!-- <v-tab value="rezagado"> CEPRE </v-tab> -->
         <v-tab value="normal"> Inscripciones </v-tab>
+        <v-tab value="fast"> Inscripciones OP2</v-tab>
       </v-tabs>
     </v-toolbar>
   </v-card>
@@ -21,6 +21,10 @@ import FormInscriptions from "./FormInscriptions.vue";
     </v-window-item> -->
     <v-window-item value="normal">
       <FormInscriptions @showMessage="snakbar = $event" />
+    </v-window-item>
+
+    <v-window-item value="fast">
+      <FormInscriptionsFast @showMessage="snakbar = $event" />
     </v-window-item>
   </v-window>
 
@@ -45,6 +49,7 @@ import { ref } from "vue";
 import { VWindowItem } from "vuetify/lib/components/index.mjs";
 // import FormRezagado from "./FormRezagado.vue";
 import FormInscriptions from "./FormInscriptions.vue";
+import FormInscriptionsFast from "./FormInscriptionsFast.vue";
 
 const typeMat = ref("normal");
 const snakbar = ref({
@@ -54,3 +59,4 @@ const snakbar = ref({
   type: null,
 });
 </script>
+./FormInscriptionsFast.vue
