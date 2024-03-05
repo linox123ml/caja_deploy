@@ -120,7 +120,13 @@ class CORE
         $idtipo    = 4; //*default: otra persona 
         $idcodigo = $newPerson['idotro'];
         $codigo    = $person->nro_doc;
-        $nombre    = $person->nombres;
+        //limpiar nombre  de apostrofes, comillas dobles y comillas simples
+        $nombrelimpio = str_replace("'", "", $person->nombres);
+        $nombrelimpio = str_replace('"', "", $nombrelimpio);
+        $nombrelimpio = str_replace('`', "", $nombrelimpio);
+        $nombrelimpio = str_replace('´', "", $nombrelimpio);
+        $nombre    = $nombrelimpio;
+
         $clave = $this->generar_clave();
         $obs    = ""; //*default: sin observaciones
 
@@ -285,9 +291,9 @@ class CORE
 
 
         $idtipo    = 0; //*default: Estudiante 
-        $idcodigo =  $person->codigo_ingreso; 
+        $idcodigo =  $person->codigo_ingreso;
         $codigo    = $person->codigo_ingreso;
-        $nombre    = $person->nombres  .' '. $person->primer_apellido . '  '.  $person->segundo_apellido ;
+        $nombre    = $person->nombres  . ' ' . $person->primer_apellido . '  ' .  $person->segundo_apellido;
         $clave = $this->generar_clave();
         $obs    = ""; //*default: sin observaciones
 
