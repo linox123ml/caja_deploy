@@ -296,10 +296,17 @@ const conceptItems = ref([
   {
     value: "0269",
     codeBN: 25,
-    title: "Duplicado de constancia de inscripcion modificada",
-    price: 30.0,
+    title: "Duplicado de constancia de inscripcion",
+    price: 20.0,
     options: null,
   },
+  {
+    value: "0269",
+    codeBN: 25,
+    title: "Duplicado de constancia de Ingreso o modificado",
+    price: 30.0,
+    options: null,
+  }
 
   // {
   //   value: "0075",
