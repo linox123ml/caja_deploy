@@ -15,5 +15,9 @@ const httpService4 = axios.create({
 const httpService2 = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL_API_SERVICE2,
 });
+//VITE_APP_API_PAYMET_API
+const httpPayment = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_PAYMET_API,
+});
 
-export { server, httpAdmition, httpService4, httpService2 };
+export { server, httpAdmition, httpService4, httpService2, httpPayment };

@@ -13,7 +13,7 @@
           placeholder="Buscar"
           hide-details="auto"
           variant="outlined"
-          :rules="rules"
+          :rules="searchRules"
           counter
           maxlength="6"
           ref="inputSearch"
@@ -68,7 +68,7 @@
           </v-list-item-title>
           <v-list-item-subtitle class="text-h6">
             <v-text-field
-              class="text-black w-25"
+              class="text-black w-50"
               color="primary"
               prefix="S/. "
               v-if="item.isEdit"
@@ -130,10 +130,15 @@
   </v-dialog>
 
   <v-dialog v-model="isInvictus">
-    <v-card theme="dark" class="mx-auto" width="600px" rounded="lg">
+    <v-card class="mx-auto" width="600px" rounded="lg">
       <v-card-title>
         Realice la operacion con el Sistema Anterior
       </v-card-title>
+      <v-divider></v-divider>
+      <v-container>
+        El codigo ingresado no tiene regitrado una deuda, por favor realice la
+        operacion con el sistema anterior.
+      </v-container>
       <v-container>
         <v-btn block>
           <a
@@ -150,7 +155,7 @@
 </template>
 <script setup>
 import { ref, watch } from "vue";
-import { AdmitionService, PayService } from "@/services/";
+import { PaymetService, PayService } from "@/services/";
 import { useMagicKeys } from "@vueuse/core";
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -160,18 +165,12 @@ const { escape } = useMagicKeys();
 const emit = defineEmits(["onSuccess", "showMessage"]);
 
 const payService = new PayService();
+const paymetService = new PaymetService();
 
 const formSearch = ref(null);
 const inputSearch = ref(null);
 
 const search = ref(null);
-
-const rules = ref([
-  (value) => {
-    if (value) return true;
-    return "Ingrese el DNI.";
-  },
-]);
 
 const snakbar = ref({
   show: false,
@@ -180,6 +179,13 @@ const snakbar = ref({
   type: null,
 });
 
+//rules input 6 digitos number
+const searchRules = ref([
+  (v) => !!v || "Ingrese el codigo",
+  (v) => (v && v.length === 6) || "El codigo debe tener 6 digitos",
+  //solo numeros
+  (v) => /^[0-9]*$/.test(v) || "Solo numeros",
+]);
 const postulantLoading = ref(false);
 
 const conceptItemsDefault = [
@@ -190,7 +196,7 @@ const conceptItemsDefault = [
     price: 0.0,
     hasPrint: false,
     payPrint: null,
-    // isEdit: true,
+    isEdit: true,
   },
 
   {
@@ -267,21 +273,33 @@ const printPDF = (item) => {
 const isInvictus = ref(false);
 
 const searchStudent = async () => {
-  postulantLoading.value = true;
-  isBlocked.value = false;
-  isBlockedData.value = null;
-
   const { valid } = await formSearch.value.validate();
-  if (!valid) {
-    snakbar.value.show = true;
-    snakbar.value.title = "Error";
-    snakbar.value.text = "Ingrese un Codigo valido (6 digitos )";
-    snakbar.value.type = "red";
-    postulantLoading.value = false;
+  if (!valid) return;
+  postulantLoading.value = true;
 
+  let rest = await paymetService.getDebsStudent(search.value);
+
+  console.log(rest);
+
+  if (rest.success) {
+    form.value.person = null;
+    form.value.details = null;
+    form.value.person = defaultPerson;
+    form.value.person = rest.data[0];
+    form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
+    form.value.details[0].price = rest.data[0].amount;
+  } else {
+    snakbar.value.show = true;
+    snakbar.value.title = "Error:";
+    snakbar.value.text = rest.message;
+    snakbar.value.type = "red";
+    isInvictus.value = true;
     emit("showMessage", snakbar.value);
-    return;
   }
+
+  postulantLoading.value = false;
+
+  return;
 
   let res = await payService.getConditionStudent(search.value);
 
@@ -307,7 +325,7 @@ const searchStudent = async () => {
     snakbar.value.title = "Error:";
     snakbar.value.text = res.message;
     snakbar.value.type = "red";
-    isInvictus.value= true;
+    isInvictus.value = true;
     emit("showMessage", snakbar.value);
   }
   postulantLoading.value = false;
