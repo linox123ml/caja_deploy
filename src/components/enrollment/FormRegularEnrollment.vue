@@ -70,6 +70,17 @@
             <v-text-field
               class="text-black w-50"
               color="primary"
+              label="Cantidad"
+
+              v-model="item.quantity"
+              v-if="item.hasQuantity"
+              @input="() => (item.price = item.quantity * 15)"
+              variant="filled"
+            />
+
+            <v-text-field
+              class="text-black w-50"
+              color="primary"
               prefix="S/. "
               v-if="item.isEdit"
               v-model="item.price"
@@ -108,6 +119,27 @@
                 Pagar
               </v-btn>
             </template>
+          </template>
+        </v-list-item>
+      </v-card>
+    </v-col>
+
+    <v-col cols="12" md="8" class="mx-auto">
+      <v-card class="border" title="Detalle">
+        <v-divider></v-divider>
+
+        <v-list-item v-for="item in form.person.resultDetail">
+          <v-list-item-title class="text-h6 font-weight-bold">
+            {{ item.name }}
+          </v-list-item-title>
+          <v-list-item-subtitle class="text-h6">
+            Cantiad: {{ Number.parseInt(item.quantity) }} - Consto Unitario: S/.
+            {{ Number.parseFloat(item.unitCost).toFixed(2) }}
+          </v-list-item-subtitle>
+          <template #append>
+            <v-chip label variant="flat" color="secondary" size="x-large">
+              {{ "S/. " + Number.parseFloat(item.cost).toFixed(2) }}
+            </v-chip>
           </template>
         </v-list-item>
       </v-card>
@@ -197,6 +229,8 @@ const conceptItemsDefault = [
     hasPrint: false,
     payPrint: null,
     isEdit: true,
+    quantity: 1,
+    hasQuantity: false,
   },
 
   {
@@ -206,6 +240,29 @@ const conceptItemsDefault = [
     price: 33.0,
     hasPrint: false,
     payPrint: null,
+    quantity: 1,
+    hasQuantity: false,
+  },
+  {
+    value: "0225",
+    title: "Carné Universitario",
+    price: 12.5,
+    hasPrint: false,
+    payPrint: null,
+    quantity: 1,
+    hasQuantity: false,
+  },
+
+  {
+    value: "0091",
+    title: "Pago por creditos segunda carrera",
+    detail: "CRÉDITOS POR SEGUNDA CARRERA",
+    price: 15.0,
+    hasPrint: false,
+    payPrint: null,
+    isEdit: false,
+    quantity: 1,
+    hasQuantity: true,
   },
 
   //   {
