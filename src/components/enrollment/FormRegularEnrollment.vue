@@ -71,7 +71,6 @@
               class="text-black w-50"
               color="primary"
               label="Cantidad"
-
               v-model="item.quantity"
               v-if="item.hasQuantity"
               @input="() => (item.price = item.quantity * 15)"
@@ -130,10 +129,16 @@
 
         <v-list-item v-for="item in form.person.resultDetail">
           <v-list-item-title class="text-h6 font-weight-bold">
-            {{ item.name }}
+            <small>
+              {{
+                item.name === "RESERVA DE MATRÍCULA (PAGO SEMESTRAL)"
+                  ? "Por haber deja de estudiar (RESERVA DE MATRÍCULA)"
+                  : item.name
+              }}
+            </small>
           </v-list-item-title>
           <v-list-item-subtitle class="text-h6">
-            Cantiad: {{ Number.parseInt(item.quantity) }} - Consto Unitario: S/.
+            Cantiad: {{ Number.parseInt(item.quantity) }} - Costo Unitario: S/.
             {{ Number.parseFloat(item.unitCost).toFixed(2) }}
           </v-list-item-subtitle>
           <template #append>
