@@ -23,6 +23,3 @@ dist-ssr
 *.sw?
 
 server/env.php
-.env
-.env.production
-.env.test
