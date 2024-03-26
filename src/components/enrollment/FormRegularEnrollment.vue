@@ -240,6 +240,25 @@ const conceptItemsDefault = [
 
   {
     value: "0091",
+    title: "Matricula",
+    price: 75.0,
+    hasPrint: false,
+    payPrint: null,
+  },
+
+  {
+    value: "0091",
+    title: "Matricula - REZAGADO",
+    detail: "REZAGADO",
+    price: 20.0,
+    hasPrint: false,
+    payPrint: null,
+    quantity: 1,
+    hasQuantity: false,
+  },
+
+  {
+    value: "0091",
     title: "Reserva de matricula",
     detail: "RESERVA DE MATRICULA",
     price: 33.0,
