@@ -493,6 +493,7 @@ const searchPostulant = async () => {
   let res = await admitionService.searchPostulant(search.value);
 
   if (res.ok) {
+    console.log("RES", res);
     if (res.status) {
       form.value.person = { nro_doc: null, nombres: null };
       form.value.details = [];
