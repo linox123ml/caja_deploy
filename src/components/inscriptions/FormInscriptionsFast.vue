@@ -468,6 +468,7 @@ const searchOtherPerson = async (term) => {
     let person = res.data;
     form.value.person.nro_doc = person.codigo;
     form.value.person.nombres = person.nombre;
+    form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
   } else {
     snakbar.value.show = true;
     snakbar.value.text = res.message;
@@ -502,17 +503,6 @@ const searchPostulant = async () => {
         res.data.segundo_apellido +
         " " +
         res.data.nombres;
-
-      // res.data.pagos.forEach((item) => {
-      //   let pago = conceptItems.value;
-
-      //   // let pago = conceptItems.value.find(
-      //   //   (element) => item.cod === element.codeBN
-      //   // );
-      //   if (pago) {
-      //     form.value.details.push(pago);
-      //   }
-      // });
       form.value.details = JSON.parse(JSON.stringify(conceptItems.value));
       postulantLoading.value = false;
       return;
