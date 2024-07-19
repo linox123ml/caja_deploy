@@ -10,7 +10,7 @@ import FormInscriptions from "./FormInscriptions.vue";
     <v-toolbar class="bg-blue-darken-4">
       <v-tabs v-model="typeMat" color="white">
         <!-- <v-tab value="normal"> Inscripciones </v-tab> -->
-        <v-tab value="fast"> Inscripciones OP2</v-tab>
+        <v-tab value="fast"> Inscripciones </v-tab>
       </v-tabs>
     </v-toolbar>
   </v-card>

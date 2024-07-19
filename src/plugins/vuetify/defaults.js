@@ -18,6 +18,7 @@ export default {
         color: "primary",
         rounded: "0",
         variant: "flat",
+        size: "large",
     },
     VChip: {
         elevation: 0,

@@ -5,13 +5,18 @@
     style="width: 600px"
   >
     <v-card-item>
-      <v-btn block variant="tonal" color="blue" @click="dialogPostulant = true">
-        NUEVO
+      <v-btn
+        block
+        variant="outlined"
+        color="black"
+        @click="dialogPostulant = true"
+      >
+        Registrar nueva persona
       </v-btn>
     </v-card-item>
     <v-container>
       <v-form ref="formSearch" @submit.prevent="searchPostulant">
-        <div class="text-subtitle-1 mb-1">Buscar / Ingese el DNI</div>
+        <div class="text-subtitle-1 mb-1">Buscar / Ingrese el DNI</div>
         <v-text-field
           v-model="search"
           density="compact"
@@ -54,7 +59,7 @@
   </v-card>
 
   <v-row v-if="form.person">
-    <v-col cols="12" md="8" class="mx-auto">
+    <v-col cols="12" md="10" class="mx-auto">
       <v-card class="border">
         <v-card-title class="font-weight-bold bg-grey">
           <small>
@@ -270,10 +275,18 @@ const conceptItems = ref([
 
   {
     value: "0269",
-    codeBN: 26,
+    codeBN: 28,
     title: "Costo por carpeta de postulante",
     price: 20.0,
     detail: "Costo por carpeta de postulante",
+    options: null,
+  },
+
+  {
+    value: "0219",
+    codeBN: 39,
+    title: "Servicio Medico",
+    price: 30.0,
     options: null,
   },
 
@@ -287,65 +300,60 @@ const conceptItems = ref([
   },
 
   {
-    value: "0219",
-    codeBN: 39,
-    title: "Servicio Medico",
+    value: "0269",
+    codeBN: 26,
+    title: "Duplicado de constancia de inscripcion",
     price: 30.0,
     options: null,
   },
+
   {
     value: "0269",
-    codeBN: 25,
-    title: "Duplicado de constancia de inscripcion",
-    price: 20.0,
+    codeBN: 26,
+    title: "Cambios de postulacion del programa de estudio",
+    price: 100.0,
     options: null,
   },
+
+
   {
     value: "0269",
     codeBN: 25,
     title: "Duplicado de constancia de Ingreso o modificado",
     price: 30.0,
     options: null,
-  }
+  },
+  {
+    value: "0269",
+    codeBN: 27,
+    title: "Rezagados al control biometrico",
+    price: 100.0,
+    options: null,
+  },
 
-  // {
-  //   value: "0075",
-  //   codeBN: 26,
-  //   title: "Derecho de Admisión -  SEGUNDA CARRERA",
-  //   price: 200.0,
-  //   detail: "SEGUNDA CARRERA",
-  //   options: [
-  //     {
-  //       title: "Colegio Estatal",
-  //       price: 400.0,
-  //        isEdit: true,
-  //     },
-  //     {
-  //       title: "Colegio Particular",
-  //       price: 700.0,
-  //        isEdit: true,
-  //     },
-  //   ],
-  // },
 
-  // {
-  //   value: "0075",
-  //   title: "Derecho de Admisión - REZAGADOS",
-  //   price: 80.0,
-  // },
+  {
+    value: "0075",
+    codeBN: 26,
+    title: "Derecho de Admisión - SEGUNDA CARRERA",
+    detail: "SEGUNDA CARRERA",
+    price: 200.0,
+    options: [
+      {
+        title: "Colegio Estatal",
+        price: 200.0,
+      },
+      {
+        title: "Colegio Particular",
+        price: 350.0,
+      },
+      {
+        title: "Colegio Extranjero",
+        price: 450.0,
+      },
+    ],
+  },
 
-  // {
-  //   value: "0269",
-  //   title: "Rezagados (para el cambio de postulacion de programa de estudio.)",
-  //   price: 100.0,
-  // },
-
-  // {
-  //   value: "0269",
-  //   title:
-  //     "Rezagados (al control de identificacion personal y recepcion de documentos, solo para postulantes aptos.)",
-  //   price: 100.0,
-  // },
 ]);
 
 const form = ref({

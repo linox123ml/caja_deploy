@@ -6,10 +6,20 @@ class AdmitionService {
       httpAdmition.defaults.headers["Authorization"] =
         "Bearer " + import.meta.env.VITE_APP_API_ADMITION_TOKEN;
       let res = await httpAdmition.get(`get-postulante-pago/${document}/8`);
+      console.log(res);
+
+      if (res.data === "") {
+        return {
+          ok: true,
+          status: false,
+          message: "No se encontraron datos",
+          data: null,
+        };
+      }
       return {
         ok: true,
         status: res.status === 200 ? true : false,
-        message: 'Consulta exitosa',
+        message: "Consulta exitosa",
         data: res.data,
       };
     } catch (error) {
